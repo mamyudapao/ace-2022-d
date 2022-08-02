@@ -1,0 +1,41 @@
+{
+  "compilerOptions": {
+    "lib": ["ESNext"],
+    "strict": true,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+    "alwaysStrict": true,
+    "noImplicitAny": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "module": "CommonJS",
+    "moduleResolution": "NodeNext",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "target": "es2017",
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "paths": {
+      "@v1/*": ["./src/v1/*"],
+      "@dto/*": ["./src/v1/dto/*"],
+      "@auth/*": ["./src/v1/auth/*"],
+      "@user/*": ["./src/v1/user/*"],
+      "@role/*": ["./src/v1/role/*"],
+      "@prisma/*": ["./src/v1/prisma/*"],
+      "@supabase/*": ["./src/v1/supabase/*"]
+    }
+  }
+}

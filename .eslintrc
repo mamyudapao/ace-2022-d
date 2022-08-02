@@ -1,0 +1,249 @@
+{
+  "extends": ["eslint:recommended", "prettier"],
+  "parserOptions": {
+    "ecmaVersion": "latest"
+  },
+  "env": {
+    "node": true
+  },
+  "overrides": [
+    {
+      "files": ["**/*.ts", "**/*.tsx"],
+      "parser": "@typescript-eslint/parser",
+      "parserOptions": {
+        "project": ["./packages/*/tsconfig.json"]
+      },
+      "plugins": [
+        "@emotion",
+        "@typescript-eslint",
+        "array-func",
+        "boundaries",
+        "jest",
+        "no-constructor-bind",
+        "no-use-extend-native",
+        "promise",
+        "regexp",
+        "sonarjs",
+        "sort-class-members",
+        "tailwindcss",
+        "unused-imports"
+      ],
+      "extends": [
+        "eslint:recommended",
+        "next",
+        "next/core-web-vitals",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/recommended-requiring-type-checking",
+        "plugin:@typescript-eslint/strict",
+        "plugin:array-func/recommended",
+        "plugin:boundaries/recommended",
+        "plugin:jest/recommended",
+        "plugin:jest/style",
+        "plugin:no-use-extend-native/recommended",
+        "plugin:promise/recommended",
+        "plugin:regexp/recommended",
+        "plugin:security/recommended",
+        "plugin:sonarjs/recommended",
+        "plugin:tailwindcss/recommended",
+        "prettier"
+      ],
+      "rules": {
+        "unused-imports/no-unused-imports": "error",
+        "@typescript-eslint/unbound-method": "off",
+        "@typescript-eslint/no-extraneous-class": "off",
+        "@typescript-eslint/no-throw-literal": "off",
+        "@next/next/no-html-link-for-pages": ["error", "./packages/frontend/src/pages"],
+        "@emotion/pkg-renaming": "error",
+        "@emotion/jsx-import": "error",
+        "@emotion/styled-import": "error",
+        "@emotion/import-from-emotion": "error",
+        "@emotion/no-vanilla": "error",
+        "@emotion/syntax-preference": "error",
+        "no-constructor-bind/no-constructor-bind": "error",
+        "no-constructor-bind/no-constructor-state": "error",
+        "sort-class-members/sort-class-members": [
+          "error",
+          {
+            "order": [
+              "[static-properties]",
+              "[static-methods]",
+              "[properties]",
+              "[conventional-private-properties]",
+              "constructor",
+              "[methods]",
+              "[conventional-private-methods]"
+            ],
+            "accessorPairPositioning": "getThenSet"
+          }
+        ]
+      },
+      "settings": {
+        "tailwindcss": {
+          "config": "./packages/frontend/tailwind.config.js"
+        },
+        "import/resolver": {
+          "typescript": {
+            "alwaysTryTypes": true,
+            "project": "packages/*/tsconfig.json"
+          }
+        },
+        "boundaries/elements": [
+          {
+            "type": "atoms",
+            "pattern": "@atoms/*"
+          },
+          {
+            "type": "molecules",
+            "pattern": "@molecules/*"
+          },
+          {
+            "type": "organisms",
+            "pattern": "@organisms/*"
+          }
+        ]
+      }
+    },
+    {
+      "files": ["./packages/backend/**/*.ts"],
+      "rules": {
+        "@typescript-eslint/naming-convention": [
+          "error",
+          {
+            "selector": "default",
+            "format": ["camelCase"]
+          },
+          {
+            "selector": "variable",
+            "format": ["camelCase", "UPPER_CASE"]
+          },
+          {
+            "selector": "parameter",
+            "format": ["camelCase"],
+            "leadingUnderscore": "allow"
+          },
+          {
+            "selector": "memberLike",
+            "format": ["camelCase"],
+            "modifiers": ["private"],
+            "leadingUnderscore": "require"
+          },
+          {
+            "selector": "typeLike",
+            "format": ["PascalCase"]
+          },
+          {
+            "selector": "objectLiteralProperty",
+            "format": ["camelCase", "snake_case"]
+          },
+          {
+            "selector": "classProperty",
+            "format": ["camelCase", "snake_case"]
+          },
+          {
+            "selector": "enumMember",
+            "format": ["UPPER_CASE"]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["./packages/backend/**/*.decorator.ts"],
+      "rules": {
+        "@typescript-eslint/naming-convention": [
+          "error",
+          {
+            "selector": "default",
+            "format": ["camelCase"]
+          },
+          {
+            "selector": "variable",
+            "format": ["camelCase", "PascalCase", "UPPER_CASE"]
+          },
+          {
+            "selector": "parameter",
+            "format": ["camelCase"],
+            "leadingUnderscore": "allow"
+          },
+          {
+            "selector": "memberLike",
+            "format": ["camelCase"],
+            "modifiers": ["private"],
+            "leadingUnderscore": "require"
+          },
+          {
+            "selector": "typeLike",
+            "format": ["PascalCase"]
+          },
+          {
+            "selector": "objectLiteralProperty",
+            "format": ["camelCase", "snake_case"]
+          },
+          {
+            "selector": "classProperty",
+            "format": ["camelCase", "snake_case"]
+          },
+          {
+            "selector": "enumMember",
+            "format": ["UPPER_CASE"]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["./packages/frontend/**/*.ts", "./packages/frontend/**/*.tsx"],
+      "rules": {
+        "@typescript-eslint/naming-convention": [
+          "error",
+          {
+            "selector": "default",
+            "format": ["camelCase"]
+          },
+          {
+            "selector": "variable",
+            "format": ["camelCase", "PascalCase", "UPPER_CASE"]
+          },
+          {
+            "selector": "parameter",
+            "format": ["camelCase", "PascalCase"],
+            "leadingUnderscore": "allow"
+          },
+          {
+            "selector": "memberLike",
+            "format": ["camelCase"],
+            "modifiers": ["private"],
+            "leadingUnderscore": "require"
+          },
+          {
+            "selector": "typeLike",
+            "format": ["PascalCase"]
+          },
+          {
+            "selector": "objectLiteralProperty",
+            "format": ["camelCase", "snake_case"]
+          },
+          {
+            "selector": "classProperty",
+            "format": ["camelCase", "snake_case"]
+          },
+          {
+            "selector": "enumMember",
+            "format": ["UPPER_CASE"]
+          }
+        ],
+        "boundaries/element-types": [
+          "error",
+          {
+            "default": "disallow",
+            "rules": [
+              {
+                "from": ["molecules"],
+                "allow": ["atoms"]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

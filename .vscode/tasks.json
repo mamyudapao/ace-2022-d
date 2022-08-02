@@ -1,0 +1,25 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "shell",
+      "label": "frontend dev",
+      "detail": "Run frontend as dev mode",
+      "command": "yarn",
+      "args": ["frontend", "start:dev"]
+    },
+    {
+      "type": "shell",
+      "label": "backend dev",
+      "detail": "Run backend as dev mode",
+      "command": "yarn",
+      "args": ["backend", "start:dev"]
+    },
+    {
+      "type": "shell",
+      "label": "dev",
+      "detail": "Run all as dev mode",
+      "dependsOn": ["frontend dev", "backend dev"]
+    }
+  ]
+}

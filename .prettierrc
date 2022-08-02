@@ -1,0 +1,31 @@
+{
+  "plugins": ["prettier-plugin-tailwindcss"],
+  "printWidth": 100,
+  "singleQuote": true,
+  "semi": true,
+  "trailingComma": "es5",
+  "arrowParens": "avoid",
+  "tailwindConfig": "./packages/frontend/tailwind.config.js",
+  "importOrder": [
+    "^@atoms/(.*)$",
+    "^@molecules/(.*)$",
+    "^@organisms/(.*)$",
+    "^@templates/(.*)$",
+    "^@hooks/(.*)$",
+    "^@hoc/(.*)$",
+    "^@utils/(.*)$",
+    "^@api/(.*)$",
+    "^@styles/(.*)$",
+    "^@v1/(.*)$",
+    "^@dto/(.*)$",
+    "^@auth/(.*)$",
+    "^@user/(.*)$",
+    "^@role/(.*)$",
+    "^@prisma/(.*)$",
+    "^@supabase/(.*)$",
+    "<THIRD_PARTY_MODULES>"
+  ],
+  "importOrderSortSpecifiers": true,
+  "importOrderGroupNamespaceSpecifiers": true,
+  "importOrderParserPlugins": ["typescript", "jsx", "classProperties", "decorators-legacy"]
+}

@@ -1,0 +1,10 @@
+{
+  "editor.formatOnSave": true,
+  "stylelint.packageManager": "yarn",
+  "npm.packageManager": "yarn",
+  "eslint.packageManager": "yarn",
+  "stylelint.validate": ["css", "less", "postcss", "typescriptreact"],
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  }
+}
