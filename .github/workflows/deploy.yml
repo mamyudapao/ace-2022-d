@@ -29,8 +29,8 @@ jobs:
           ECR_REPOSITORY: ${{ secrets.AWS_ECR_REPO_NAME }}
         run: |
           docker compose -f ./packages/infrastructure/docker/docker-compose.prod.yml build
-          docker compose -f ./packages/infrastructure/docker/docker-compose.prod.yml push backend
-          docker compose -f ./packages/infrastructure/docker/docker-compose.prod.yml push frontend
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY-frontend
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY-backend
 
           echo "::set-output name=frontend::$ECR_REGISTRY/$ECR_REPOSITORY-frontend"
           echo "::set-output name=backend::$ECR_REGISTRY/$ECR_REPOSITORY-backend"
