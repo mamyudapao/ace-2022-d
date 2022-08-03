@@ -42,7 +42,7 @@
         "plugin:boundaries/recommended",
         "plugin:no-use-extend-native/recommended",
         "plugin:promise/recommended",
-        "optimize-regex/recommended",
+        "plugin:optimize-regex/recommended",
         "plugin:regexp/recommended",
         "plugin:security/recommended",
         "plugin:sonarjs/recommended",
