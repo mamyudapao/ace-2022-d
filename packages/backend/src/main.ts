@@ -1,7 +1,7 @@
-import { AppModule } from '@v1/app.module';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import { AppModule } from '@v1/app.module';
 
 const bootstrap = async () => {
   const application = await NestFactory.create<NestExpressApplication>(AppModule);

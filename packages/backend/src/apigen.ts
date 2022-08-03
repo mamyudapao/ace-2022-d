@@ -1,8 +1,8 @@
-import { AppModule } from '@v1/app.module';
 import * as fs from 'node:fs';
 import { VersioningType } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { AppModule } from '@v1/app.module';
 
 const generateSwagger = async () => {
   const application = await NestFactory.create(AppModule);

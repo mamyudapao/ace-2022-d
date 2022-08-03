@@ -7,6 +7,7 @@
   "arrowParens": "avoid",
   "tailwindConfig": "./packages/frontend/tailwind.config.js",
   "importOrder": [
+    "<THIRD_PARTY_MODULES>",
     "^@atoms/(.*)$",
     "^@molecules/(.*)$",
     "^@organisms/(.*)$",
@@ -22,8 +23,7 @@
     "^@user/(.*)$",
     "^@role/(.*)$",
     "^@prisma/(.*)$",
-    "^@supabase/(.*)$",
-    "<THIRD_PARTY_MODULES>"
+    "^@supabase/(.*)$"
   ],
   "importOrderSortSpecifiers": true,
   "importOrderGroupNamespaceSpecifiers": true,

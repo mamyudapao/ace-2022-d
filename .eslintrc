@@ -18,15 +18,17 @@
         "@typescript-eslint",
         "array-func",
         "boundaries",
-        "jest",
         "no-constructor-bind",
         "no-use-extend-native",
+        "optimize-regex",
         "promise",
         "regexp",
         "sonarjs",
         "sort-class-members",
+        "switch-case",
         "tailwindcss",
-        "unused-imports"
+        "unused-imports",
+        "only-warn"
       ],
       "extends": [
         "eslint:recommended",
@@ -38,13 +40,13 @@
         "plugin:@typescript-eslint/strict",
         "plugin:array-func/recommended",
         "plugin:boundaries/recommended",
-        "plugin:jest/recommended",
-        "plugin:jest/style",
         "plugin:no-use-extend-native/recommended",
         "plugin:promise/recommended",
+        "optimize-regex/recommended",
         "plugin:regexp/recommended",
         "plugin:security/recommended",
         "plugin:sonarjs/recommended",
+        "plugin:switch-case/recommended",
         "plugin:tailwindcss/recommended",
         "prettier"
       ],
@@ -121,12 +123,6 @@
             "selector": "parameter",
             "format": ["camelCase"],
             "leadingUnderscore": "allow"
-          },
-          {
-            "selector": "memberLike",
-            "format": ["camelCase"],
-            "modifiers": ["private"],
-            "leadingUnderscore": "require"
           },
           {
             "selector": "typeLike",

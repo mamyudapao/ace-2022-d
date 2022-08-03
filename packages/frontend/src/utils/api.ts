@@ -1,6 +1,6 @@
-import { Configuration } from '@api/configuration';
 import { AxiosError, AxiosResponse } from 'axios';
 import { parseCookies } from 'nookies';
+import { Configuration } from '@api/configuration';
 
 const configuration = new Configuration({
   basePath: process.env['NEXT_PUBLIC_API_ENDPOINT'],
