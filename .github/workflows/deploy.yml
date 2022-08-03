@@ -29,25 +29,22 @@ jobs:
           ECR_REPOSITORY: ${{ secrets.AWS_ECR_REPO_NAME }}
         run: |
           docker compose -f ./packages/infrastructure/docker/docker-compose.prod.yml build
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY-frontend
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY-backend
-
-          echo "::set-output name=frontend::$ECR_REGISTRY/$ECR_REPOSITORY-frontend"
-          echo "::set-output name=backend::$ECR_REGISTRY/$ECR_REPOSITORY-backend"
+          docker compose -f ./packages/infrastructure/docker/docker-compose.prod.yml push backend
+          docker compose -f ./packages/infrastructure/docker/docker-compose.prod.yml push frontend
 
       - id: render_frontend
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: aws/task_definition.json
+          task-definition: ./packages/infrastructure/aws/task_definition.json
           container-name: frontend
-          image: ${{ steps.build.outputs.frontend }}
+          image: ${{ steps.login.outputs.registry }}/${{ secrets.AWS_ECR_REPO_NAME }}-frontend:latest
 
       - id: render_backend
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: aws/task_definition.json
+          task-definition: ./packages/infrastructure/aws/task_definition.json
           container-name: backend
-          image: ${{ steps.build.outputs.backend }}
+          image: ${{ steps.login.outputs.registry }}/${{ secrets.AWS_ECR_REPO_NAME }}-backend:latest
 
       - uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
