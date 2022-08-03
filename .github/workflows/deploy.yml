@@ -1,9 +1,13 @@
-name: Build and Push
+name: Deploy
 
 on:
   push:
     branches:
       - master
+
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
   deploy:
@@ -11,54 +15,48 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
+      - uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ap-northeast-1
 
-      - name: Login to ECR
-        id: login-ecr
+      - id: login
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Build and push image to ECR
-        id: build-image
+      - id: build
         env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REGISTRY: ${{ steps.login.outputs.registry }}
           ECR_REPOSITORY: ${{ secrets.AWS_ECR_REPO_NAME }}
         run: |
-          docker compose -f ./packages/infrastructure/docker/docker-compose.local.yml build
-          docker compose -f ./packages/infrastructure/docker/docker-compose.local.yml push backend
-          docker compose -f ./packages/infrastructure/docker/docker-compose.local.yml push frontend
+          docker compose -f ./packages/infrastructure/docker/docker-compose.prod.yml build
+          docker compose -f ./packages/infrastructure/docker/docker-compose.prod.yml push backend
+          docker compose -f ./packages/infrastructure/docker/docker-compose.prod.yml push frontend
+
           echo "::set-output name=frontend::$ECR_REGISTRY/$ECR_REPOSITORY-frontend"
           echo "::set-output name=backend::$ECR_REGISTRY/$ECR_REPOSITORY-backend"
 
-      - name: Render Amazon ECS task definition
-        id: render-container-frontend
+      - id: render_frontend
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: aws/task-definition.json
-          container-name: Web-Server
-          image: ${{ steps.build-image.outputs.frontend }}
+          task-definition: aws/task_definition.json
+          container-name: frontend
+          image: ${{ steps.build.outputs.frontend }}
 
-      - name: Render Amazon ECS task definition
-        id: render-container-backend
+      - id: render_backend
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: aws/task-definition.json
-          container-name: Web-Server
-          image: ${{ steps.build-image.outputs.backend }}
+          task-definition: aws/task_definition.json
+          container-name: backend
+          image: ${{ steps.build.outputs.backend }}
 
-      - name: Deploy to Amazon ECS service
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      - uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
-          task-definition: ${{ steps.render-container-frontend.outputs.task-definition }}
+          task-definition: ${{ steps.render_frontend.outputs.task-definition }}
           service: api-ecs-service
           cluster: api-ecs-cluster
 
-      - name: Deploy to Amazon ECS service
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      - uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
-          task-definition: ${{ steps.render-container-backend.outputs.task-definition }}
+          task-definition: ${{ steps.render_backend.outputs.task-definition }}
           service: api-ecs-service
           cluster: api-ecs-cluster
