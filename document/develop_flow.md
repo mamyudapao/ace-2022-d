@@ -31,13 +31,13 @@ yarn install
 
 ## ブランチを切る
 
-命名規則は [コード規約](./code_convention.md#ブランチ) を参照してください。
+命名規則は [コード規約](code_convention.md#ブランチ) を参照してください。
 
 ## 開発サーバーの起動
 
 ※初期セットアップが終わっている前提です。
 
-1. ローカルでMySQLを起動する
+1. ローカルで MySQL を起動する
 
 ```bash
 docker-compose -f ./packages/infrastructure/docker/docker-compose.local.yml up -d mysql
@@ -68,7 +68,7 @@ Supabase Inbucket: http://localhost:54324
 
 ## コミットする
 
-できるだけ細分化するようにし、コミットメッセージは [コード規約](./code_convention.md#コミットメッセージ) を参照してください。
+できるだけ細分化するようにし、コミットメッセージは [コード規約](code_convention.md#コミット) を参照してください。
 
 ## PR を作成する
 
