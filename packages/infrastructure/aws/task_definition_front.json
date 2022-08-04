@@ -26,7 +26,16 @@
       "command": [],
       "linuxParameters": null,
       "cpu": 0,
-      "environment": [],
+      "environment": [
+        {
+          "name": "NODE_ENV",
+          "value": "production"
+        },
+        {
+          "name": "NEXT_PUBLIC_API_ENDPOINT",
+          "value": "https://api.d.ace2208.net"
+        }
+      ],
       "resourceRequirements": null,
       "ulimits": [],
       "dnsServers": [],
