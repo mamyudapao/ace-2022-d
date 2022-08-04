@@ -28,13 +28,15 @@ jobs:
           restore-keys: ${{ runner.os }}-pr-node-modules-
       - run: yarn install --frozen-lockfile
       - run: |
+          #!/bin/bash
           local_branch="$(git branch --show-current)"
+          branch_regex="^feature\/[a-z0-9_]+$"
 
           if [ -z "$local_branch" ]; then
             local_branch="${{ github.head_ref }}"
           fi
 
-          if [[ ! $local_branch =~ "^feature\/[a-z0-9_]+$" ]]; then
+          if [[ ! $local_branch =~ $branch_regex ]]; then
             echo "Invalid branch name: $local_branch"
             exit 1
           fi

@@ -58,6 +58,7 @@
 .idea/**/uiDesigner.xml
 .idea/**/usage.statistics.xml
 .idea/**/workspace.xml
+.idea/**/markdown.xml
 .next/
 node_modules/
 out/
@@ -68,3 +69,4 @@ yarn-error.log*
 swagger.json
 openapitools.json
 .DS_Store
+packages/infrastructure/docker/volumes

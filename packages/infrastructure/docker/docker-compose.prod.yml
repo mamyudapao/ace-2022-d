@@ -11,11 +11,11 @@ services:
       context: ../../..
       dockerfile: ./packages/infrastructure/docker/Dockerfile
       target: frontend
-    image: ${ECR_REGISTRY}/${ECR_REPOSITORY}-frontend
+    image: ${ECR_REGISTRY}/${ECR_REPOSITORY_FRONT}
     environment:
       NEXT_PUBLIC_API_ENDPOINT: https://api.d.ace2208.net
     ports:
-      - '127.0.0.1:80:3000'
+      - '80:3000'
     restart: on-failure
 
   backend:
@@ -23,9 +23,9 @@ services:
       context: ../../..
       dockerfile: ./packages/infrastructure/docker/Dockerfile
       target: backend
-    image: ${ECR_REGISTRY}/${ECR_REPOSITORY}-backend
+    image: ${ECR_REGISTRY}/${ECR_REPOSITORY_API}
     environment:
-      DATABASE_URL: mysql://root:$${MYSQL_PASSWORD}@db-server-cluster.cluster-cvpoijg92k5y.ap-northeast-1.rds.amazonaws.com:3306/root
+      DATABASE_URL: mysql://root:$${MYSQL_PASSWORD}@db-server-cluster.cluster-cvpoijg92k5y.ap-northeast-1.rds.amazonaws.com:3306/tapple
     ports:
-      - '127.0.0.1:80:3001'
+      - '80:3001'
     restart: on-failure

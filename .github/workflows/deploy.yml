@@ -21,38 +21,45 @@ jobs:
           aws-region: ap-northeast-1
 
       - id: login
+        name: login to ECR
         uses: aws-actions/amazon-ecr-login@v1
 
       - id: build
+        name: build docker image
         env:
           ECR_REGISTRY: ${{ steps.login.outputs.registry }}
-          ECR_REPOSITORY: ${{ secrets.AWS_ECR_REPO_NAME }}
+          ECR_REPOSITORY_FRONT: ${{ secrets.AWS_ECR_REPO_FRONT }}
+          ECR_REPOSITORY_API: ${{ secrets.AWS_ECR_REPO_API }}
         run: |
           docker compose -f ./packages/infrastructure/docker/docker-compose.prod.yml build
           docker compose -f ./packages/infrastructure/docker/docker-compose.prod.yml push backend
           docker compose -f ./packages/infrastructure/docker/docker-compose.prod.yml push frontend
 
       - id: render_frontend
+        name: render frontend
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: ./packages/infrastructure/aws/task_definition.json
+          task-definition: ./packages/infrastructure/aws/task_definition_front.json
           container-name: frontend
-          image: ${{ steps.login.outputs.registry }}/${{ secrets.AWS_ECR_REPO_NAME }}-frontend:latest
+          image: ${{ steps.login.outputs.registry }}/${{ secrets.AWS_ECR_REPO_FRONT }}:latest
 
       - id: render_backend
+        name: render backend
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: ./packages/infrastructure/aws/task_definition.json
-          container-name: backend
-          image: ${{ steps.login.outputs.registry }}/${{ secrets.AWS_ECR_REPO_NAME }}-backend:latest
+          task-definition: ./packages/infrastructure/aws/task_definition_api.json
+          container-name: Web-Server
+          image: ${{ steps.login.outputs.registry }}/${{ secrets.AWS_ECR_REPO_API }}:latest
 
-      - uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      - name: deploy frontend
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
           task-definition: ${{ steps.render_frontend.outputs.task-definition }}
-          service: api-ecs-service
-          cluster: api-ecs-cluster
+          service: front-ecs-service
+          cluster: front-ecs-cluster
 
-      - uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      - name: deploy backend
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
           task-definition: ${{ steps.render_backend.outputs.task-definition }}
           service: api-ecs-service

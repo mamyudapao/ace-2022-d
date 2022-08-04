@@ -11,10 +11,11 @@ services:
       context: ../../..
       dockerfile: ./packages/infrastructure/docker/Dockerfile
       target: frontend
+    image: ace-d-frontend
     environment:
       NEXT_PUBLIC_API_ENDPOINT: http://backend:3001
     ports:
-      - '127.0.0.1:3000:3000'
+      - '3000:3000'
     restart: on-failure
 
   backend:
@@ -22,10 +23,11 @@ services:
       context: ../../..
       dockerfile: ./packages/infrastructure/docker/Dockerfile
       target: backend
+    image: ace-d-backend
     environment:
       DATABASE_URL: mysql://root:password@mysql:3306/root
     ports:
-      - '127.0.0.1:3001:3001'
+      - '3001:3001'
     restart: on-failure
 
   mysql:
@@ -34,5 +36,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: 'password'
       MYSQL_DATABASE: 'root'
+      TZ: Asia/Tokyo
     ports:
-      - '127.0.0.1:3306:3306'
+      - '3306:3306'
+    volumes:
+      - ./volumes/mysql:/var/lib/mysql

@@ -18,64 +18,9 @@
       "entryPoint": [],
       "portMappings": [
         {
-          "hostPort": 0,
+          "hostPort": 80,
           "protocol": "tcp",
-          "containerPort": 80
-        }
-      ],
-      "command": [],
-      "linuxParameters": null,
-      "cpu": 0,
-      "environment": [],
-      "resourceRequirements": null,
-      "ulimits": [],
-      "dnsServers": [],
-      "mountPoints": [],
-      "workingDirectory": null,
-      "secrets": [],
-      "dockerSecurityOptions": [],
-      "memory": 128,
-      "memoryReservation": null,
-      "volumesFrom": [],
-      "stopTimeout": null,
-      "image": "",
-      "startTimeout": null,
-      "firelensConfiguration": null,
-      "dependsOn": null,
-      "disableNetworking": null,
-      "interactive": null,
-      "healthCheck": null,
-      "essential": true,
-      "links": [],
-      "hostname": null,
-      "extraHosts": [],
-      "pseudoTerminal": null,
-      "user": null,
-      "readonlyRootFilesystem": null,
-      "dockerLabels": {},
-      "systemControls": [],
-      "privileged": null,
-      "name": "frontend"
-    },
-    {
-      "dnsSearchDomains": [],
-      "environmentFiles": [],
-      "logConfiguration": {
-        "logDriver": "awslogs",
-        "secretOptions": [],
-        "options": {
-          "awslogs-group": "/ecs/api-ecs-service",
-          "awslogs-region": "ap-northeast-1",
-          "awslogs-create-group": "true",
-          "awslogs-stream-prefix": "ecs"
-        }
-      },
-      "entryPoint": [],
-      "portMappings": [
-        {
-          "hostPort": 0,
-          "protocol": "tcp",
-          "containerPort": 80
+          "containerPort": 3001
         }
       ],
       "command": [],
@@ -94,8 +39,8 @@
         }
       ],
       "dockerSecurityOptions": [],
-      "memory": 128,
-      "memoryReservation": null,
+      "memory": null,
+      "memoryReservation": 128,
       "volumesFrom": [],
       "stopTimeout": null,
       "image": "",
@@ -115,7 +60,7 @@
       "dockerLabels": {},
       "systemControls": [],
       "privileged": null,
-      "name": "backend"
+      "name": "Web-Server"
     }
   ],
   "placementConstraints": [],
