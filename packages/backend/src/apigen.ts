@@ -11,7 +11,11 @@ const generateSwagger = async () => {
     type: VersioningType.URI,
   });
 
-  const config = new DocumentBuilder().setTitle('ace_2022_team_d').build();
+  const config = new DocumentBuilder()
+    .setTitle('ace_2022_team_d')
+    .addServer('http://localhost:3001')
+    .addServer('https://api.d.ace2208.net')
+    .build();
   const document = SwaggerModule.createDocument(application, config, {
     operationIdFactory: (_controllerKey, methodKey) => methodKey,
   });

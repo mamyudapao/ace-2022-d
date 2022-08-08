@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="start:production" type="CompoundRunConfigurationType">
+    <toRun name="backend start:production" type="js.build_tools.npm" />
+    <toRun name="frontend start:production" type="js.build_tools.npm" />
+    <method v="2" />
+  </configuration>
+</component>

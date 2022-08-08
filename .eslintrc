@@ -4,7 +4,8 @@
     "ecmaVersion": "latest"
   },
   "env": {
-    "node": true
+    "node": true,
+    "browser": true
   },
   "overrides": [
     {
@@ -189,6 +190,7 @@
     {
       "files": ["./packages/frontend/**/*.ts", "./packages/frontend/**/*.tsx"],
       "rules": {
+        "react/display-name": "off",
         "@typescript-eslint/naming-convention": [
           "error",
           {
@@ -216,7 +218,7 @@
           },
           {
             "selector": "objectLiteralProperty",
-            "format": ["camelCase", "snake_case"]
+            "format": null
           },
           {
             "selector": "classProperty",
@@ -225,6 +227,11 @@
           {
             "selector": "enumMember",
             "format": ["UPPER_CASE"]
+          },
+          {
+            "selector": "class",
+            "format": ["PascalCase"],
+            "leadingUnderscore": "allow"
           }
         ],
         "boundaries/element-types": [
