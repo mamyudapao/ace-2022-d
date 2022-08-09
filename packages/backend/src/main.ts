@@ -8,7 +8,9 @@ import { AppModule } from '@v1/app.module';
 
 const bootstrap = async () => {
   const application = await NestFactory.create<NestExpressApplication>(AppModule, {
-    cors: true,
+    cors: {
+      origin: process.env['FRONTEND_URL']?.split(','),
+    },
   });
 
   application.use(compression());
