@@ -6,6 +6,5 @@ export const saveCookie = (name: string, value: string, context?: NextPageContex
     path: '/',
     maxAge: 30 * 24 * 60 * 60,
     sameSite: 'strict',
-    secure: process.env.NODE_ENV === 'production',
   });
 };

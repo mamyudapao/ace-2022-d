@@ -12,9 +12,6 @@ services:
       dockerfile: ./packages/infrastructure/docker/Dockerfile
       target: frontend
     image: ${ECR_REGISTRY}/${ECR_REPOSITORY_FRONT}
-    ports:
-      - '80:3000'
-    restart: on-failure
 
   backend:
     build:
@@ -22,6 +19,3 @@ services:
       dockerfile: ./packages/infrastructure/docker/Dockerfile
       target: backend
     image: ${ECR_REGISTRY}/${ECR_REPOSITORY_API}
-    ports:
-      - '80:3001'
-    restart: on-failure

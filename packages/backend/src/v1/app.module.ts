@@ -14,7 +14,6 @@ import { PrismaModule } from '@prisma/prisma.module';
     CacheModule.register(),
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: [`.env.${process.env['NODE_ENV'] ?? 'development'}`, `.env`],
     }),
     ThrottlerModule.forRoot({
       ttl: 60,

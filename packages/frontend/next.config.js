@@ -28,8 +28,6 @@ class ObfuscatorPlugin {
                 seed: Math.round(Math.random() * Number.MAX_SAFE_INTEGER),
                 controlFlowFlattening: true,
                 deadCodeInjection: true,
-                debugProtection: true,
-                debugProtectionInterval: 2000,
                 disableConsoleOutput: true,
                 numbersToExpressions: true,
                 selfDefending: true,

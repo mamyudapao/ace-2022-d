@@ -28,8 +28,8 @@
       "cpu": 0,
       "environment": [
         {
-          "name": "NODE_ENV",
-          "value": "production"
+          "name": "NEXT_PUBLIC_API_ENDPOINT",
+          "value": "https://api.d.ace2208.net"
         }
       ],
       "resourceRequirements": null,

@@ -28,10 +28,6 @@
       "cpu": 0,
       "environment": [
         {
-          "name": "NODE_ENV",
-          "value": "production"
-        },
-        {
           "name": "DATABASE_URL",
           "value": "mysql://root:${MYSQL_PASSWORD}@db-server-cluster.cluster-cvpoijg92k5y.ap-northeast-1.rds.amazonaws.com:3306/root"
         }
