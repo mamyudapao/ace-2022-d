@@ -10,7 +10,10 @@ const bootstrap = async () => {
   const application = await NestFactory.create<NestExpressApplication>(AppModule);
 
   application.enableCors({
-    origin: '*',
+    origin: ['http://localhost:3000', 'https://front.d.ace2208.net'],
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept-Language'],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
   });
 
   application.use(compression());

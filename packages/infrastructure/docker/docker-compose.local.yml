@@ -5,6 +5,7 @@ services:
       context: ../../..
       dockerfile: ./packages/infrastructure/docker/Dockerfile
       target: builder
+    image: ace-d-builder
 
   frontend:
     build:

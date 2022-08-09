@@ -26,11 +26,9 @@ class ObfuscatorPlugin {
             assets[path] = new sources.RawSource(
               obfuscate(asset.source(), {
                 seed: Math.round(Math.random() * Number.MAX_SAFE_INTEGER),
-                controlFlowFlattening: true,
-                deadCodeInjection: true,
                 disableConsoleOutput: true,
                 numbersToExpressions: true,
-                selfDefending: true,
+                splitStrings: true,
               }).getObfuscatedCode()
             );
 

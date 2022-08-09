@@ -6,6 +6,9 @@ import { Configuration } from '@api/configuration';
 
 const configuration = new Configuration({
   basePath: process.env['NEXT_PUBLIC_API_ENDPOINT'],
+  baseOptions: {
+    withCredentials: true,
+  },
 });
 
 export const apiClient = {
