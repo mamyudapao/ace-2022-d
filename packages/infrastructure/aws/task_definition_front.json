@@ -26,12 +26,7 @@
       "command": [],
       "linuxParameters": null,
       "cpu": 0,
-      "environment": [
-        {
-          "name": "NEXT_PUBLIC_API_ENDPOINT",
-          "value": "https://api.d.ace2208.net"
-        }
-      ],
+      "environment": [],
       "resourceRequirements": null,
       "ulimits": [],
       "dnsServers": [],
