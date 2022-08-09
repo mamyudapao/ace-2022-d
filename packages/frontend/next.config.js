@@ -31,7 +31,6 @@ class ObfuscatorPlugin {
                 debugProtection: true,
                 debugProtectionInterval: 2000,
                 disableConsoleOutput: true,
-                domainLock: process.env['DOMAIN_LOCK'].split(','),
                 numbersToExpressions: true,
                 selfDefending: true,
               }).getObfuscatedCode()
