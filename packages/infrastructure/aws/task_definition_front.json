@@ -34,10 +34,6 @@
         {
           "name": "NEXT_PUBLIC_API_ENDPOINT",
           "value": "https://api.d.ace2208.net"
-        },
-        {
-          "name": "DOMAIN_LOCK",
-          "value": "front.d.ace2208.net"
         }
       ],
       "resourceRequirements": null,
