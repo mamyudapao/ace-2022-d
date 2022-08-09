@@ -5,8 +5,6 @@ services:
       context: ../../..
       dockerfile: ./packages/infrastructure/docker/Dockerfile
       target: builder
-    environment:
-      - DOMAIN_LOCK=front.d.ace2208.net
 
   frontend:
     build:
