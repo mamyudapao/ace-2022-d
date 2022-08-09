@@ -7,10 +7,10 @@ import csurf from 'csurf';
 import { AppModule } from '@v1/app.module';
 
 const bootstrap = async () => {
-  const application = await NestFactory.create<NestExpressApplication>(AppModule, {
-    cors: {
-      origin: process.env['FRONTEND_URL']?.split(','),
-    },
+  const application = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  application.enableCors({
+    origin: '*',
   });
 
   application.use(compression());
