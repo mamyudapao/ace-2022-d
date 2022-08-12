@@ -61,9 +61,6 @@ yarn frontend start:dev
 フロントエンド: http://localhost:3000
 バックエンド: http://localhost:3001
 データベース: postgresql://postgres:postgres@localhost:54322/postgres
-Supabase API: http://localhost:54321
-Supabase Studio: http://localhost:54323
-Supabase Inbucket: http://localhost:54324
 ```
 
 ## コミットする

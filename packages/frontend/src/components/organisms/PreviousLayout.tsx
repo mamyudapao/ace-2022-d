@@ -2,7 +2,7 @@ import { Typography } from '@mui/material';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ReactNode } from 'react';
-import { AiOutlineArrowLeft } from 'react-icons/ai';
+import { FiArrowLeft } from 'react-icons/fi';
 
 interface PreviousHeaderProps {
   link?: {
@@ -19,26 +19,28 @@ const PreviousLayout = (props: PreviousHeaderProps) => {
   const router = useRouter();
 
   return (
-    <div className="flex h-screen w-screen flex-col gap-6 p-4">
-      <div className="flex w-full items-center justify-between">
-        <AiOutlineArrowLeft className="cursor-pointer" size={32} onClick={router.back} />
-        {props.link && (
-          <Link href={props.link.href}>
-            <Typography className="cursor-pointer select-none" variant="subtitle1">
-              {props.link.text}
-            </Typography>
-          </Link>
-        )}
+    <div className="flex h-screen w-screen flex-col justify-between gap-6 overflow-hidden px-3 py-4">
+      <div className="flex flex-1 flex-col overflow-hidden">
+        <div className="flex items-center justify-between">
+          <FiArrowLeft className="cursor-pointer" size={32} onClick={router.back} />
+          {props.link && (
+            <Link href={props.link.href}>
+              <Typography className="cursor-pointer select-none" variant="subtitle1">
+                {props.link.text}
+              </Typography>
+            </Link>
+          )}
+        </div>
+        <div
+          className={
+            'flex flex-1 flex-col gap-6 p-4 overflow-hidden' +
+            ` items-${props.align ?? 'start'} justify-${props.justify ?? 'start'}`
+          }
+        >
+          {props.children}
+        </div>
       </div>
-      <div
-        className={
-          'flex w-full h-full flex-col gap-6 p-6' +
-          ` items-${props.align ?? 'start'} justify-${props.justify ?? 'start'}`
-        }
-      >
-        {props.children}
-      </div>
-      {props.footer}
+      <div className="flex-none">{props.footer}</div>
     </div>
   );
 };

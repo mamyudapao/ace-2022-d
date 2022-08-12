@@ -58,7 +58,7 @@
         "@typescript-eslint/no-throw-literal": "off",
         "@next/next/no-html-link-for-pages": ["error", "./packages/frontend/src/pages"],
         "@emotion/pkg-renaming": "error",
-        "@emotion/jsx-import": "error",
+        "@emotion/jsx-import": "off",
         "@emotion/styled-import": "error",
         "@emotion/import-from-emotion": "error",
         "@emotion/no-vanilla": "error",

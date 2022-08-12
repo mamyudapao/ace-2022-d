@@ -1,18 +1,48 @@
-import Document, { Head, Html, Main, NextScript } from 'next/document';
+import createEmotionServer from '@emotion/server/create-instance';
+import { AppType, RenderPageResult } from 'next/dist/shared/lib/utils';
+import Document, { DocumentContext, Head, Html, Main, NextScript } from 'next/document';
+import React from 'react';
+import { emotionCache } from '@utils/cache';
 
 class _Document extends Document {
   render() {
     return (
-      <Html>
+      <Html
+        lang="ja"
+        style={{
+          display: 'none',
+        }}
+      >
         <Head>
+          <meta charSet="utf-8" />
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" />
           <link
             href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap"
             rel="stylesheet"
           />
-          <meta name="msapplication-square70x70logo" content="/site-tile-70x70.png" />
-          <meta name="msapplication-square150x150logo" content="/site-tile-150x150.png" />
-          <meta name="msapplication-wide310x150logo" content="/site-tile-310x150.png" />
-          <meta name="msapplication-square310x310logo" content="/site-tile-310x310.png" />
+          <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+          <meta name="twitter:domain" content="front.d.ace2208.net" />
+          <meta name="twitter:site" content="@tapple_official" />
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="thumbnail" content="/icons/android-chrome-192x192.png" />
+          <meta property="og:image" content="https://tapple.me/ogp_img.png" />
+          <meta
+            property="og:description"
+            content="マッチングアプリ「タップル(tapple)」公式ページはこちら！グルメや映画、スポーツ観戦など好きなことから恋の相手を見つけることができる新感覚恋活・婚活・出会いをつなげる恋活・マッチングサービスです！登録とお相手探しはいつでも無料！女性は無料でご利用いただけます"
+          />
+          <meta
+            property="og:title"
+            content="タップル(tapple) - 恋活・婚活マッチングアプリ【公式】｜サイバーエージェントグループ企業運営"
+          />
+          <meta
+            name="description"
+            content="マッチングアプリ「タップル(tapple)」公式ページはこちら！グルメや映画、スポーツ観戦など好きなことから恋の相手を見つけることができる新感覚恋活・婚活・出会いをつなげる恋活・マッチングサービスです！登録とお相手探しはいつでも無料！女性は無料でご利用いただけます"
+          />
+          <meta name="msapplication-square70x70logo" content="/icons/site-tile-70x70.png" />
+          <meta name="msapplication-square150x150logo" content="/icons/site-tile-150x150.png" />
+          <meta name="msapplication-wide310x150logo" content="/icons/site-tile-310x150.png" />
+          <meta name="msapplication-square310x310logo" content="/icons/site-tile-310x310.png" />
           <meta name="msapplication-TileColor" content="#0078d7" />
           <link rel="shortcut icon" type="image/vnd.microsoft.icon" href="/favicon.ico" />
           <link rel="icon" type="image/vnd.microsoft.icon" href="/favicon.ico" />
@@ -87,7 +117,7 @@ class _Document extends Document {
           <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon-16x16.png" />
           <link rel="icon" type="image/png" sizes="24x24" href="/icons/icon-24x24.png" />
           <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32x32.png" />
-          <link rel="manifest" href="/icons/manifest.json" />
+          <link rel="manifest" href="/manifest.json" />
         </Head>
         <body>
           <Main />
@@ -97,5 +127,35 @@ class _Document extends Document {
     );
   }
 }
+
+_Document.getInitialProps = async (ctx: DocumentContext) => {
+  const originalRenderPage = ctx.renderPage;
+
+  const { extractCriticalToChunks } = createEmotionServer(emotionCache);
+
+  ctx.renderPage = (): RenderPageResult | Promise<RenderPageResult> =>
+    originalRenderPage({
+      enhanceApp:
+        (App: AppType) =>
+        (props): JSX.Element =>
+          <App {...props} />,
+    });
+
+  const initialProps = await Document.getInitialProps(ctx);
+  const emotionStyles = extractCriticalToChunks(initialProps.html);
+  const emotionStyleTags = emotionStyles.styles.map(style => (
+    <style
+      data-emotion={`${style.key} ${style.ids.join(' ')}`}
+      key={style.key}
+      dangerouslySetInnerHTML={{ __html: style.css }}
+    />
+  ));
+
+  return {
+    ...initialProps,
+    html: emotionStyles.html,
+    styles: [...React.Children.toArray(initialProps.styles), ...emotionStyleTags],
+  };
+};
 
 export default _Document;

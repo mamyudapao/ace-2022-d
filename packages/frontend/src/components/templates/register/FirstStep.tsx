@@ -1,10 +1,10 @@
-import { RegisterStepProps } from '../../../pages/register';
 import { Button, Typography } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
 import { BsLine } from 'react-icons/bs';
 import { FcGoogle } from 'react-icons/fc';
 import PreviousLayout from '@organisms/PreviousLayout';
+import { RegisterStepProps } from '@pages/register';
 
 type FirstStepProps = RegisterStepProps;
 
@@ -47,12 +47,16 @@ const FirstStep = (props: FirstStepProps) => {
         </Button>
       </Link>
       <div className="flex w-72 flex-row justify-around">
-        <Typography className="cursor-pointer select-none" variant="subtitle2" color="#888fa1">
-          利用規約
-        </Typography>
-        <Typography className="cursor-pointer select-none" variant="subtitle2" color="#888fa1">
-          プライバシーポリシー
-        </Typography>
+        <Link href="https://static.tapple.me/policy/terms.html">
+          <Typography className="cursor-pointer select-none" variant="subtitle2" color="#888fa1">
+            利用規約
+          </Typography>
+        </Link>
+        <Link href="https://static.tapple.me/policy/privacy.html">
+          <Typography className="cursor-pointer select-none" variant="subtitle2" color="#888fa1">
+            プライバシーポリシー
+          </Typography>
+        </Link>
       </div>
     </PreviousLayout>
   );

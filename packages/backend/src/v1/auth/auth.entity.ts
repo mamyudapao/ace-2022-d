@@ -1,4 +1,4 @@
-import { IsAscii, IsDateString, IsEmail, IsNotEmpty, Length } from 'class-validator';
+import { IsAscii, IsDateString, IsEmail, IsEnum, IsNotEmpty, Length } from 'class-validator';
 import { Gender, Prefecture } from '@entity/user.entity';
 
 export class LoginRequest {
@@ -39,7 +39,11 @@ export class RegisterRequest {
 
   @IsDateString()
   birthday!: string;
+
+  @IsEnum(Gender)
   gender!: Gender;
+
+  @IsEnum(Prefecture)
   prefecture!: Prefecture;
 }
 

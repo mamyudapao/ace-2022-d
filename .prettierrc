@@ -1,5 +1,4 @@
 {
-  "plugins": ["prettier-plugin-tailwindcss"],
   "printWidth": 100,
   "singleQuote": true,
   "semi": true,
@@ -12,6 +11,7 @@
     "^@molecules/(.*)$",
     "^@organisms/(.*)$",
     "^@templates/(.*)$",
+    "^@pages/(.*)$",
     "^@hooks/(.*)$",
     "^@hoc/(.*)$",
     "^@utils/(.*)$",

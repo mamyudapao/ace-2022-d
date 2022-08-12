@@ -7,7 +7,7 @@ const Index = () => {
 export const getServerSideProps = withAuth(() => {
   return {
     redirect: {
-      destination: '/messages',
+      destination: '/home',
       permanent: false,
     },
   };

@@ -1,9 +1,16 @@
-import { ThemeProvider, createTheme } from '@mui/material';
+import { CacheProvider } from '@emotion/react';
+import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
+import { useEffect } from 'react';
+import { emotionCache } from '@utils/cache';
 import '@styles/global.css';
 
 const App = ({ Component, pageProps }: AppProps) => {
+  useEffect(() => {
+    document.documentElement.removeAttribute('style');
+  }, []);
+
   const theme = createTheme({
     palette: {
       primary: {
@@ -22,47 +29,50 @@ const App = ({ Component, pageProps }: AppProps) => {
       divider: '#e7e8ec',
     },
     typography: {
-      fontFamily: 'Noto Sans JP',
+      fontFamily: 'Noto Sans JP, sans-serif',
       fontSize: 14,
       allVariants: {
         color: '#000038',
       },
       h1: {
-        fontSize: '1.8rem',
-        fontWeight: 500,
-      },
-      h2: {
-        fontSize: '1.7rem',
-        fontWeight: 500,
-      },
-      h3: {
         fontSize: '1.6rem',
         fontWeight: 500,
       },
-      h4: {
+      h2: {
         fontSize: '1.5rem',
         fontWeight: 500,
       },
-      h5: {
+      h3: {
         fontSize: '1.4rem',
         fontWeight: 500,
       },
-      h6: {
+      h4: {
         fontSize: '1.3rem',
         fontWeight: 500,
       },
-      subtitle1: {
+      h5: {
+        fontSize: '1.2rem',
+        fontWeight: 500,
+      },
+      h6: {
         fontSize: '1.1rem',
+        fontWeight: 700,
+      },
+      subtitle1: {
+        fontSize: '1rem',
         fontWeight: 500,
         color: '#888fa1',
       },
       subtitle2: {
         fontSize: '0.85rem',
         fontWeight: 400,
-        color: '#888fa1',
+        color: '#6e7586',
+      },
+      caption: {
+        fontSize: '0.6rem',
       },
       button: {
-        fontSize: '1.3rem',
+        fontSize: '1.2rem',
       },
     },
     components: {
@@ -73,7 +83,7 @@ const App = ({ Component, pageProps }: AppProps) => {
         },
         styleOverrides: {
           root: {
-            height: '56px',
+            height: '48px',
             borderRadius: '999px',
             textTransform: 'none',
             boxShadow: 'none',
@@ -88,7 +98,7 @@ const App = ({ Component, pageProps }: AppProps) => {
         },
         styleOverrides: {
           root: {
-            height: '48px',
+            height: '32px',
             '& > div::before': {
               borderColor: '#e7e8ec',
             },
@@ -111,17 +121,58 @@ const App = ({ Component, pageProps }: AppProps) => {
           },
         },
       },
+      MuiTabs: {
+        styleOverrides: {
+          root: {
+            '& .MuiTabs-indicator': {
+              backgroundColor: '#172242',
+            },
+          },
+        },
+      },
+      MuiTab: {
+        styleOverrides: {
+          root: {
+            fontSize: '0.9rem',
+            fontWeight: 700,
+            color: '#abb0bb',
+            marginBottom: '4px',
+            '&.Mui-selected': {
+              color: '#172242',
+            },
+          },
+        },
+      },
+      MuiAvatar: {
+        styleOverrides: {
+          root: {
+            backgroundColor: '#fc5c6c',
+          },
+        },
+      },
+      MuiFormControlLabel: {
+        styleOverrides: {
+          label: {
+            color: '#888fa1',
+            fontWeight: 'bold',
+          },
+        },
+      },
     },
   });
 
   return (
     <>
       <Head>
+        <title>タップル(tapple)</title>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
-      <ThemeProvider theme={theme}>
-        <Component {...pageProps} />
-      </ThemeProvider>
+      <CacheProvider value={emotionCache}>
+        <CssBaseline />
+        <ThemeProvider theme={theme}>
+          <Component {...pageProps} />
+        </ThemeProvider>
+      </CacheProvider>
     </>
   );
 };

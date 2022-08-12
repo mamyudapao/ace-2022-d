@@ -42,6 +42,7 @@
       "@molecules/*": ["./components/molecules/*"],
       "@organisms/*": ["./components/organisms/*"],
       "@templates/*": ["./components/templates/*"],
+      "@pages/*": ["./pages/*"],
       "@hooks/*": ["./hooks/*"],
       "@hoc/*": ["./hoc/*"],
       "@utils/*": ["./utils/*"],

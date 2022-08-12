@@ -7,7 +7,6 @@
     </scripts>
     <arguments value="start:production" />
     <node-interpreter value="project" />
-    <node-options value="NODE_ENV=production" />
     <envs />
     <method v="2">
       <option name="NpmBeforeRunTask" enabled="true">

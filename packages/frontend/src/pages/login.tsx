@@ -80,14 +80,14 @@ const Login = () => {
               accessToken && saveCookie('access_token', accessToken);
               refreshToken && saveCookie('refresh_token', refreshToken);
 
-              await router.push('/');
               await mutate();
+              await router.push('/');
             }
 
             setLoading(false);
           })}
         >
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-2">
             <Controller
               name="email"
               control={control}

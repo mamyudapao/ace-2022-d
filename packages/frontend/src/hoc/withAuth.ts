@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { NextPageContext } from 'next';
-import { parseCookies } from 'nookies';
+import { destroyCookie, parseCookies } from 'nookies';
 import { apiClient } from '@utils/api';
 import { saveCookie } from '@utils/cookie';
 import { HocHandler } from '@utils/hoc';
@@ -8,14 +8,14 @@ import { HocHandler } from '@utils/hoc';
 export const withAuth: HocHandler = (next?) => async (context: NextPageContext) => {
   const { access_token: accessToken, refresh_token: refreshToken } = parseCookies(context);
 
-  if (!accessToken || !refreshToken) {
-    return {
-      redirect: {
-        destination: '/get_started',
-        permanent: false,
-      },
-    };
-  }
+  const redirectToGetStarted = {
+    redirect: {
+      destination: '/get_started',
+      permanent: false,
+    },
+  };
+
+  if (!accessToken || !refreshToken) return redirectToGetStarted;
 
   context.res?.setHeader(
     'Cache-Control',
@@ -34,27 +34,28 @@ export const withAuth: HocHandler = (next?) => async (context: NextPageContext) 
         };
   } catch (error) {
     if (axios.isAxiosError(error) && error.response?.status === 401) {
-      const { data } = await apiClient.auth.refreshToken({ refresh_token: refreshToken });
+      try {
+        const { data } = await apiClient.auth.refreshToken({ refresh_token: refreshToken });
 
-      saveCookie('access_token', data.access_token);
-      data.refresh_token && saveCookie('refresh_token', data.refresh_token);
+        saveCookie('access_token', data.access_token);
+        data.refresh_token && saveCookie('refresh_token', data.refresh_token);
 
-      const user = (await apiClient.users.me(`Bearer ${data.access_token}`)).data;
+        const user = (await apiClient.users.me(`Bearer ${data.access_token}`)).data;
 
-      return next
-        ? next(context, user)
-        : {
-            props: {
-              user,
-            },
-          };
+        return next
+          ? next(context, user)
+          : {
+              props: {
+                user,
+              },
+            };
+      } catch (e) {
+        destroyCookie(context, 'access_token');
+        destroyCookie(context, 'refresh_token');
+        return redirectToGetStarted;
+      }
     }
 
-    return {
-      redirect: {
-        destination: '/get_started',
-        permanent: false,
-      },
-    };
+    return redirectToGetStarted;
   }
 };

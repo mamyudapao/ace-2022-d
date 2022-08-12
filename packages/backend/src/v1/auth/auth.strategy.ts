@@ -20,7 +20,9 @@ export class AuthStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: { sub: string }) {
+  async validate(payload: { sub?: string }) {
+    if (!payload.sub) throw new UnauthorizedException('Invalid access token');
+
     const user: User | null = await this.prismaService.user.findUnique({
       where: {
         id: payload.sub,

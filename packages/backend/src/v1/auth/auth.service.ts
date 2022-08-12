@@ -113,7 +113,7 @@ export class AuthService {
       throw new BadRequestException('Email is already registered');
 
     const payload = {
-      id: randomUUID(),
+      sub: randomUUID(),
     };
 
     const accessToken = this.jwtService.sign(payload, {
@@ -126,7 +126,7 @@ export class AuthService {
 
     await this.prismaService.user.create({
       data: {
-        id: payload.id,
+        id: payload.sub,
         email,
         nickname,
         password: await hash(password, 10),
