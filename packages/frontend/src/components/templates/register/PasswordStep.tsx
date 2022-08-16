@@ -62,7 +62,7 @@ const PasswordStep = (props: PasswordStepProps) => {
         パスワード
       </Typography>
       <Typography variant="subtitle2">半角英数字6文字以上で入力してください。</Typography>
-      <form className="flex flex-col gap-3">
+      <form className="flex w-full flex-col gap-3">
         <Controller
           name="password"
           control={control}

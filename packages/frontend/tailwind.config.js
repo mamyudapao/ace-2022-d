@@ -1,6 +1,6 @@
 module.exports = {
   content: ['./src/pages/**/*.tsx', './src/components/**/*.tsx'],
-  important: '#__next',
+  important: 'body',
   corePlugins: {
     preflight: false,
   },

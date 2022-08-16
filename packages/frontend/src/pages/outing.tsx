@@ -1,4 +1,6 @@
 import FooterLayout from '@organisms/FooterLayout';
+import { withAuth } from '@hoc/withAuth';
+import { withProfile } from '@hoc/withProfile';
 
 const Outing = () => {
   return (
@@ -7,5 +9,7 @@ const Outing = () => {
     </FooterLayout>
   );
 };
+
+export const getServerSideProps = withAuth(withProfile());
 
 export default Outing;

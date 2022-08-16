@@ -1,5 +1,5 @@
-import { IsAscii, IsDateString, IsEmail, IsEnum, IsNotEmpty, Length } from 'class-validator';
-import { Gender, Prefecture } from '@entity/user.entity';
+import { IsAscii, IsDateString, IsEmail, IsIn, IsNotEmpty, Length } from 'class-validator';
+import { Gender, Prefecture } from '@prisma/client';
 
 export class LoginRequest {
   @IsEmail()
@@ -40,10 +40,10 @@ export class RegisterRequest {
   @IsDateString()
   birthday!: string;
 
-  @IsEnum(Gender)
+  @IsIn(Object.keys(Gender))
   gender!: Gender;
 
-  @IsEnum(Prefecture)
+  @IsIn(Object.keys(Prefecture))
   prefecture!: Prefecture;
 }
 

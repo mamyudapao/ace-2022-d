@@ -90,6 +90,15 @@ const App = ({ Component, pageProps }: AppProps) => {
             fontSize: '1.1rem',
             fontWeight: 500,
           },
+          outlined: {
+            fontSize: '14px',
+            fontWeight: 'bold',
+            borderColor: '#fc5c6c',
+            borderWidth: '2px',
+            '&:hover': {
+              borderWidth: '2px',
+            },
+          },
         },
       },
       MuiTextField: {
@@ -155,6 +164,25 @@ const App = ({ Component, pageProps }: AppProps) => {
           label: {
             color: '#888fa1',
             fontWeight: 'bold',
+          },
+        },
+      },
+      MuiDialog: {
+        styleOverrides: {
+          paper: {
+            borderRadius: '20px',
+          },
+          paperFullWidth: {
+            width: '75%',
+          },
+        },
+      },
+      MuiDialogTitle: {
+        styleOverrides: {
+          root: {
+            fontSize: '1rem',
+            padding: '8px',
+            fontWeight: '500',
           },
         },
       },

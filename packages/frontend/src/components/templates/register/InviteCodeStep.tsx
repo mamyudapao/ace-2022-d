@@ -29,6 +29,7 @@ const InviteCodeStep = (props: InviteCodeStepProps) => {
 };
 
 const InviteCodeInput = styled(TextField)`
+  width: 100%;
   height: 64px;
 
   & > div {

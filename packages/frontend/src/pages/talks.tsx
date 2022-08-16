@@ -5,8 +5,9 @@ import Link from 'next/link';
 import { BsCheckCircleFill } from 'react-icons/bs';
 import FooterLayout from '@organisms/FooterLayout';
 import { withAuth } from '@hoc/withAuth';
+import { withProfile } from '@hoc/withProfile';
 
-const Messages = () => {
+const Talks = () => {
   return (
     <>
       <Head>
@@ -144,6 +145,6 @@ const MessageLine = (props: MessageLineProps) => {
   );
 };
 
-export const getServerSideProps = withAuth();
+export const getServerSideProps = withAuth(withProfile());
 
-export default Messages;
+export default Talks;

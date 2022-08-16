@@ -3,6 +3,8 @@ import { Button, Divider, TextField, Typography } from '@mui/material';
 import { AxiosError } from 'axios';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { GetServerSidePropsContext } from 'next/types';
+import { parseCookies } from 'nookies';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
@@ -87,7 +89,7 @@ const Login = () => {
             setLoading(false);
           })}
         >
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-6">
             <Controller
               name="email"
               control={control}
@@ -204,6 +206,22 @@ const Login = () => {
       </PreviousLayout>
     </>
   );
+};
+
+export const getServerSideProps = (ctx: GetServerSidePropsContext) => {
+  const { access_token: accessToken, refresh_token: refreshToken } = parseCookies(ctx);
+  if (accessToken && refreshToken) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
 };
 
 export default Login;

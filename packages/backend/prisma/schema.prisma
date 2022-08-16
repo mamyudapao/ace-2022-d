@@ -35,6 +35,9 @@ model Profile {
   education       Education?
   income          Income?
   holiday         Holiday?
+  work_prefecture Prefecture?
+  born_prefecture Prefecture?
+  blood_type      BloodType?
   marry_intention MarryIntention?
   date_plans      DatePlan[]
   hobbies         Hobby[]
@@ -43,6 +46,7 @@ model Profile {
 model DatePlan {
   id                   String           @id @default(uuid())
   name                 String
+  image                String
   category             DatePlanCategory @relation(fields: [date_plan_categoryId], references: [id])
   date_plan_categoryId String
   profiles             Profile[]
@@ -128,6 +132,13 @@ enum MarryIntention {
   WANT_TO_MARRY
   IF_I_MEET_THE_RIGHT_PERSON
   NO_PLAN
+}
+
+enum BloodType {
+  A
+  B
+  AB
+  O
 }
 
 enum Prefecture {

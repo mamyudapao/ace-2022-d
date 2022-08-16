@@ -6,6 +6,7 @@ import { AppController } from '@v1/app.controller';
 import { AuthModule } from '@auth/auth.module';
 import { UserModule } from '@user/user.module';
 import { PrismaModule } from '@prisma/prisma.module';
+import { ConstantModule } from '@constant/constant.module';
 
 @Module({
   controllers: [AppController],
@@ -13,6 +14,7 @@ import { PrismaModule } from '@prisma/prisma.module';
     PrismaModule,
     AuthModule,
     UserModule,
+    ConstantModule,
     CacheModule.register(),
     ConfigModule.forRoot({
       isGlobal: true,

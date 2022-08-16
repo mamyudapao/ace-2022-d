@@ -1,6 +1,7 @@
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import BirthdayStep from '@templates/register/BirthdayStep';
 import EmailStep from '@templates/register/EmailStep';
 import FirstStep from '@templates/register/FirstStep';
@@ -13,18 +14,19 @@ import PrefectureStep from '@templates/register/PrefectureStep';
 import { useAuth } from '@hooks/auth';
 import { apiClient } from '@utils/api';
 import { saveCookie } from '@utils/cookie';
-import { RegisterRequestGenderEnum, RegisterRequestPrefectureEnum } from '@api/api';
+import { RegisterRequestGenderEnum, RegisterRequestPrefectureEnum } from '@api/model';
 
 export interface RegisterStepProps {
   nextStepHref: string;
 }
 
 const Register = (props: { step: string }) => {
+  const router = useRouter();
   const { mutate } = useAuth();
 
-  const [gender, setGender] = useState<string>();
+  const [gender, setGender] = useState<RegisterRequestGenderEnum>();
   const [birthday, setBirthday] = useState<string>();
-  const [prefecture, setPrefecture] = useState<string>();
+  const [prefecture, setPrefecture] = useState<RegisterRequestPrefectureEnum>();
   const [nickname, setNickname] = useState<string>();
   const [email, setEmail] = useState<string>();
   const [password, setPassword] = useState<string>();
@@ -33,9 +35,9 @@ const Register = (props: { step: string }) => {
     if (!gender || !birthday || !prefecture || !nickname || !email || !password) return;
 
     const res = await apiClient.auth.register({
-      gender: gender as RegisterRequestGenderEnum,
+      gender,
+      prefecture,
       birthday,
-      prefecture: prefecture as RegisterRequestPrefectureEnum,
       nickname,
       email,
       password,
@@ -68,11 +70,15 @@ const Register = (props: { step: string }) => {
       case '8':
         return <InviteCodeStep nextStepHref="/register?step=9" />;
       case '9':
-        return <LastStep nextStepHref="/" handleRegister={handleRegister} />;
+        return <LastStep nextStepHref="/profile" handleRegister={handleRegister} />;
       default:
         return null;
     }
   }, [handleRegister, props.step]);
+
+  useEffect(() => {
+    if (stepPage === null && router.isReady) void router.push('/404');
+  }, [router, stepPage]);
 
   return (
     <>

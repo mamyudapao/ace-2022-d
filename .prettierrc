@@ -4,7 +4,6 @@
   "semi": true,
   "trailingComma": "es5",
   "arrowParens": "avoid",
-  "tailwindConfig": "./packages/frontend/tailwind.config.js",
   "importOrder": [
     "<THIRD_PARTY_MODULES>",
     "^@atoms/(.*)$",
@@ -18,13 +17,10 @@
     "^@api/(.*)$",
     "^@styles/(.*)$",
     "^@v1/(.*)$",
-    "^@dto/(.*)$",
-    "^@entity/(.*)$",
     "^@auth/(.*)$",
     "^@user/(.*)$",
-    "^@role/(.*)$",
     "^@prisma/(.*)$",
-    "^@supabase/(.*)$"
+    "^@constant/(.*)$"
   ],
   "importOrderSortSpecifiers": true,
   "importOrderGroupNamespaceSpecifiers": true,

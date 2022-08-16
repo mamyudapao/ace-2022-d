@@ -5,9 +5,10 @@
   "scripts": {
     "start:dev": "prisma migrate dev && nest start --watch",
     "start:production": "prisma migrate deploy && nest start",
+    "seed:dev": "prisma migrate reset -f && ts-node src/seed/seed.dev.ts",
+    "seed:production": "prisma migrate reset -f && ts-node src/seed/seed.prod.ts",
     "build": "nest build",
-    "apigen": "prisma generate && nest start --config apigen.json",
-    "seed": "prisma migrate reset -f && ts-node ./src/seed.ts"
+    "apigen": "prisma generate && nest start --config apigen.json"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.8",

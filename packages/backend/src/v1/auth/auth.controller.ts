@@ -1,6 +1,5 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { Token } from '@dto/token.dto';
 import {
   LoginRequest,
   LoginResponse,
@@ -21,7 +20,7 @@ export class AuthController {
 
   @Post('/login')
   async login(@Body() loginRequest: LoginRequest): Promise<LoginResponse> {
-    const token: Token = await this.authService.login(loginRequest.email, loginRequest.password);
+    const token = await this.authService.login(loginRequest.email, loginRequest.password);
 
     return {
       access_token: token.accessToken,
@@ -33,7 +32,7 @@ export class AuthController {
   async refreshToken(
     @Body() refreshTokenRequest: RefreshTokenRequest
   ): Promise<RefreshTokenResponse> {
-    const token: Token = await this.authService.refreshToken(refreshTokenRequest.refresh_token);
+    const token = await this.authService.refreshToken(refreshTokenRequest.refresh_token);
 
     return {
       access_token: token.accessToken,
@@ -43,7 +42,7 @@ export class AuthController {
 
   @Post('/register')
   async register(@Body() registerRequest: RegisterRequest): Promise<RegisterResponse> {
-    const token: Token = await this.authService.register(
+    const token = await this.authService.register(
       registerRequest.email,
       registerRequest.password,
       registerRequest.nickname,

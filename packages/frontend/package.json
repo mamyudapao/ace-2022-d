@@ -6,7 +6,7 @@
     "start:dev": "next dev",
     "start:production": "next start",
     "build": "next build",
-    "apigen": "openapi-generator-cli generate -g typescript-axios -i ../swagger.json -o ./src/api --additional-properties=supportsES6=true,withInterfaces=true,stringEnums=true"
+    "apigen": "openapi-generator-cli generate -g typescript-axios -i ../swagger.json -o ./src/api --api-package api --model-package model --additional-properties=supportsES6=true,withInterfaces=true,withSeparateModelsAndApi=true,enumPropertyNaming=UPPERCASE"
   },
   "dependencies": {
     "@emotion/react": "^11.10.0",

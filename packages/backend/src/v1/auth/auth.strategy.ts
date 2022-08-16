@@ -27,6 +27,9 @@ export class AuthStrategy extends PassportStrategy(Strategy) {
       where: {
         id: payload.sub,
       },
+      include: {
+        profile: true,
+      },
     });
 
     if (!user) throw new UnauthorizedException('Invalid access token');

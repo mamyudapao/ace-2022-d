@@ -1,7 +1,7 @@
 import { AxiosError, AxiosResponse } from 'axios';
 import { destroyCookie, parseCookies } from 'nookies';
 import { saveCookie } from '@utils/cookie';
-import { AuthApi, UsersApi, UsersApiInterface } from '@api/api';
+import { AuthApi, ConstantApi, UsersApi } from '@api/api';
 import { Configuration } from '@api/configuration';
 
 const configuration = new Configuration({
@@ -14,7 +14,8 @@ const configuration = new Configuration({
 
 export const apiClient = {
   auth: new AuthApi(configuration),
-  users: new UsersApi(configuration) as UsersApiInterface,
+  users: new UsersApi(configuration),
+  constant: new ConstantApi(configuration),
 };
 
 export type AuthParameters<F> = F extends (

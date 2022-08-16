@@ -26,7 +26,12 @@
       "command": [],
       "linuxParameters": null,
       "cpu": 0,
-      "environment": [],
+      "environment": [
+        {
+          "name": "NODE_ENV",
+          "value": "production"
+        }
+      ],
       "resourceRequirements": null,
       "ulimits": [],
       "dnsServers": [],

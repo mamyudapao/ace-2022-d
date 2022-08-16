@@ -1,11 +1,9 @@
 {
   "plugins": [
     "stylelint-a11y",
-    "stylelint-csstree-validator",
     "stylelint-declaration-block-no-ignored-properties",
     "stylelint-group-selectors",
-    "stylelint-high-performance-animation",
-    "stylelint-no-unsupported-browser-features"
+    "stylelint-high-performance-animation"
   ],
   "extends": [
     "stylelint-config-recommended",
@@ -14,21 +12,10 @@
     "stylelint-config-prettier"
   ],
   "rules": {
-    "csstree/validator": [
-      true,
-      {
-        "severity": "warning"
-      }
-    ],
+    "function-no-unknown": null,
     "plugin/declaration-block-no-ignored-properties": true,
     "plugin/stylelint-group-selectors": true,
-    "plugin/no-low-performance-animation-properties": true,
-    "plugin/no-unsupported-browser-features": [
-      true,
-      {
-        "severity": "warning"
-      }
-    ]
+    "plugin/no-low-performance-animation-properties": true
   },
   "overrides": [
     {

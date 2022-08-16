@@ -2,7 +2,6 @@ import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/
 import { JwtService } from '@nestjs/jwt';
 import { compare, hash } from 'bcrypt';
 import { randomUUID } from 'crypto';
-import { Token } from '@dto/token.dto';
 import { Gender, Prefecture, User } from '@prisma/client';
 import { PrismaService } from '@prisma/prisma.service';
 
@@ -13,7 +12,13 @@ export class AuthService {
     private readonly jwtService: JwtService
   ) {}
 
-  async login(email: string, password: string): Promise<Token> {
+  async login(
+    email: string,
+    password: string
+  ): Promise<{
+    accessToken: string;
+    refreshToken: string;
+  }> {
     const user: User | null = await this.prismaService.user.findUnique({
       where: {
         email: email,
@@ -51,7 +56,10 @@ export class AuthService {
     };
   }
 
-  async refreshToken(refreshToken: string): Promise<Token> {
+  async refreshToken(refreshToken: string): Promise<{
+    accessToken: string;
+    refreshToken: string;
+  }> {
     let payload: {
       sub: string;
     };
@@ -108,7 +116,10 @@ export class AuthService {
     gender: string,
     birthday: string,
     prefecture: string
-  ): Promise<Token> {
+  ): Promise<{
+    accessToken: string;
+    refreshToken: string;
+  }> {
     if (await this.prismaService.user.findUnique({ where: { email } }))
       throw new BadRequestException('Email is already registered');
 

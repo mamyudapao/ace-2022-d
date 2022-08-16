@@ -30,13 +30,10 @@
     "baseUrl": "./",
     "paths": {
       "@v1/*": ["./src/v1/*"],
-      "@dto/*": ["./src/v1/dto/*"],
-      "@entity/*": ["./src/v1/entity/*"],
       "@auth/*": ["./src/v1/auth/*"],
       "@user/*": ["./src/v1/user/*"],
-      "@role/*": ["./src/v1/role/*"],
       "@prisma/*": ["./src/v1/prisma/*"],
-      "@supabase/*": ["./src/v1/supabase/*"]
+      "@constant/*": ["./src/v1/constant/*"]
     }
   }
 }

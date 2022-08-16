@@ -4,13 +4,14 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import PreviousLayout from '@organisms/PreviousLayout';
 import { RegisterStepProps } from '@pages/register';
+import { RegisterRequestGenderEnum } from '@api/model';
 
 interface GenderStepProps extends RegisterStepProps {
-  setGender: (gender: string) => void;
+  setGender: (gender: RegisterRequestGenderEnum) => void;
 }
 
 const GenderStep = (props: GenderStepProps) => {
-  const [gender, setGender] = useState<string>();
+  const [gender, setGender] = useState<RegisterRequestGenderEnum>();
 
   useEffect(() => {
     gender && props.setGender(gender);
@@ -30,7 +31,7 @@ const GenderStep = (props: GenderStepProps) => {
         性別
       </Typography>
       <Typography variant="subtitle2">一度登録した性別は変更できません。</Typography>
-      <div className="flex flex-col gap-3">
+      <div className="flex w-full flex-col gap-3">
         <SelectorButton selected={gender === 'MALE'} onClick={() => setGender('MALE')}>
           男性
         </SelectorButton>

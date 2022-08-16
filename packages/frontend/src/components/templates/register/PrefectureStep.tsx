@@ -10,13 +10,14 @@ import Link from 'next/link';
 import { ChangeEvent, useEffect, useState } from 'react';
 import PreviousLayout from '@organisms/PreviousLayout';
 import { RegisterStepProps } from '@pages/register';
+import { RegisterRequestPrefectureEnum } from '@api/model';
 
 interface PrefectureStepProps extends RegisterStepProps {
-  setPrefecture: (prefecture: string) => void;
+  setPrefecture: (prefecture: RegisterRequestPrefectureEnum) => void;
 }
 
 const PrefectureStep = (props: PrefectureStepProps) => {
-  const [prefecture, setPrefecture] = useState<string>();
+  const [prefecture, setPrefecture] = useState<RegisterRequestPrefectureEnum>();
   const prefectures: {
     key: string;
     japaneseName: string;
@@ -91,8 +92,12 @@ const PrefectureStep = (props: PrefectureStepProps) => {
       <Typography className="select-none" variant="h3">
         居住地
       </Typography>
-      <FormControl className="overflow-y-scroll">
-        <RadioGroup onChange={(e: ChangeEvent<HTMLInputElement>) => setPrefecture(e.target.value)}>
+      <FormControl className="w-full overflow-y-scroll">
+        <RadioGroup
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setPrefecture(e.currentTarget.value as RegisterRequestPrefectureEnum)
+          }
+        >
           {prefectures.map(prefecture => (
             <FormControlLabel
               key={prefecture.key}
