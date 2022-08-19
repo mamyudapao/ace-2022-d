@@ -1,19 +1,27 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { UpdateUserRequest } from '@user/user.entity';
-import { Profile, User } from '@prisma/client';
+import { DatePlan, Hobby, Profile, User } from '@prisma/client';
 import { PrismaService } from '@prisma/prisma.service';
 
 @Injectable()
 export class UserService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async getUser(id: string): Promise<User & { profile: Profile | null }> {
+  async getUser(
+    id: string
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+  ): Promise<User & { profile: (Profile & { date_plans: DatePlan[]; hobbies: Hobby[] }) | null }> {
     const result = await this.prismaService.user.findUnique({
       where: {
         id,
       },
       include: {
-        profile: true,
+        profile: {
+          include: {
+            date_plans: true,
+            hobbies: true,
+          },
+        },
       },
     });
 
@@ -22,6 +30,7 @@ export class UserService {
     return result;
   }
 
+  // TODO: include date_plans and hobbies
   async updateUser(
     id: string,
     data: UpdateUserRequest
