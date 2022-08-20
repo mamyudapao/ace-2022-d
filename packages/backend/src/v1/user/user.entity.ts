@@ -38,17 +38,25 @@ export class UserResponse {
       blood_type: { type: 'string', enum: Object.keys(BloodType) },
       marry_intention: { type: 'string', enum: Object.keys(MarryIntention) },
       date_plans: {
-        properties: {
-          name: { type: 'string' },
-          image: { type: 'string' },
-          date_plan_category_id: { type: 'string' },
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            name: { type: 'string' },
+            image: { type: 'string' },
+            date_plan_category_id: { type: 'string' },
+          },
         },
       },
       hobbies: {
-        properties: {
-          name: { type: 'string' },
-          image: { type: 'string' },
-          category_id: { type: 'string' },
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            name: { type: 'string' },
+            image: { type: 'string' },
+            category_id: { type: 'string' },
+          },
         },
       },
     },
