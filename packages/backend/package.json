@@ -21,6 +21,7 @@
     "@nestjs/throttler": "^3.0.0",
     "@nestjs/websockets": "^9.0.11",
     "@prisma/client": "^4.2.1",
+    "aws-sdk": "^2.1198.0",
     "bcrypt": "^5.0.1",
     "cache-manager": "^4.1.0",
     "class-transformer": "^0.5.1",

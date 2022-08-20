@@ -386,106 +386,127 @@ prisma
       ),
     });
 
-    const user1 = await client.user.create({
-      data: {
-        email: 'user1@example.com',
-        nickname: 'テストユーザー1',
-        password: hashSync('password', 10),
-        refresh_token: '',
-        gender: 'MALE',
-        birthday: '2000-01-01',
-        prefecture: 'TOKYO',
-        profile: {
-          create: {
-            description: 'XX系の会社でYYをしています！ZZをやっている方と繋がりたいです！',
-            avatar:
-              'https://2208-ace-d.s3.ap-northeast-1.amazonaws.com/male/n000029/main_0001_01.jpg',
-            height: 170,
-            weight: 'NORMAL',
-            education: 'UNIVERSITY',
-            income: 'BETWEEN_500_AND_700',
-            holiday: 'WEEKEND',
-            work_prefecture: 'TOKYO',
-            born_prefecture: 'OSAKA',
-            blood_type: 'A',
-            marry_intention: 'IF_I_MEET_THE_RIGHT_PERSON',
-            date_plans: {
-              connect: [],
-            },
-            hobbies: {
-              create: [],
-            },
-          },
-        },
-      },
-    });
+    const maleUserNum = 10;
+    const femaleUserNum = 10;
+    const maleUserIds = [];
+    const femaleUserIds = [];
 
-    const user2 = await client.user.create({
-      data: {
-        email: 'user2@example.com',
-        nickname: 'テストユーザー2',
-        password: hashSync('password', 10),
-        refresh_token: '',
-        gender: 'FEMALE',
-        birthday: '2000-01-01',
-        prefecture: 'OSAKA',
-        profile: {
-          create: {
-            description: 'AA会社でBBをしています！CCをやっている方と繋がりたいです！',
-            avatar:
-              'https://2208-ace-d.s3.ap-northeast-1.amazonaws.com/male/n000029/main_0001_01.jpg',
-            height: 150,
-            weight: 'LITTLE_THIN',
-            education: 'UNIVERSITY',
-            income: 'BETWEEN_500_AND_700',
-            holiday: 'WEEKEND',
-            work_prefecture: 'OSAKA',
-            born_prefecture: 'TOKYO',
-            blood_type: 'AB',
-            marry_intention: 'IF_I_MEET_THE_RIGHT_PERSON',
-            date_plans: {
-              connect: [],
-            },
-            hobbies: {
-              create: [],
+    for (let i = 0; i < maleUserNum; i++) {
+      const maleUser = await client.user.create({
+        data: {
+          email: 'user' + i.toString() + '@example.com',
+          nickname: 'テストユーザー' + i.toString(),
+          password: hashSync('password', 10),
+          refresh_token: '',
+          gender: 'MALE',
+          birthday: '2000-01-01',
+          prefecture: 'TOKYO',
+          profile: {
+            create: {
+              description: 'XX系の会社でYYをしています！ZZをやっている方と繋がりたいです！',
+              avatar:
+                'https://2208-ace-d.s3.ap-northeast-1.amazonaws.com/male/n000029/main_0001_01.jpg',
+              height: 170,
+              weight: 'NORMAL',
+              education: 'UNIVERSITY',
+              income: 'BETWEEN_500_AND_700',
+              holiday: 'WEEKEND',
+              work_prefecture: 'TOKYO',
+              born_prefecture: 'OSAKA',
+              blood_type: 'A',
+              marry_intention: 'IF_I_MEET_THE_RIGHT_PERSON',
+              date_plans: {
+                connect: [],
+              },
+              hobbies: {
+                create: [],
+              },
             },
           },
         },
-      },
-    });
+      });
 
-    await client.talk.create({
-      data: {
-        users: {
-          connect: [{ id: user1.id }, { id: user2.id }],
-        },
-        messages: {
-          createMany: {
-            data: [
-              {
-                author_id: user1.id,
-                content: 'こんにちは！初めまして！',
-                created_at: new Date(2022, 7, 18, 11, 30, 0),
+      maleUserIds.push(maleUser.id);
+    }
+
+    for (let i = 0; i < femaleUserNum; i++) {
+      const femaleUser = await client.user.create({
+        data: {
+          email: 'user' + (i + maleUserNum).toString() + '@example.com',
+          nickname: 'テストユーザー' + (i + maleUserNum).toString(),
+          password: hashSync('password', 10),
+          refresh_token: '',
+          gender: 'FEMALE',
+          birthday: '2000-01-01',
+          prefecture: 'OSAKA',
+          profile: {
+            create: {
+              description: 'AA会社でBBをしています！CCをやっている方と繋がりたいです！',
+              avatar:
+                'https://2208-ace-d.s3.ap-northeast-1.amazonaws.com/male/n000029/main_0001_01.jpg',
+              height: 150,
+              weight: 'LITTLE_THIN',
+              education: 'UNIVERSITY',
+              income: 'BETWEEN_500_AND_700',
+              holiday: 'WEEKEND',
+              work_prefecture: 'OSAKA',
+              born_prefecture: 'TOKYO',
+              blood_type: 'AB',
+              marry_intention: 'IF_I_MEET_THE_RIGHT_PERSON',
+              date_plans: {
+                connect: [],
               },
-              {
-                author_id: user2.id,
-                content: 'こんにちは！',
-                created_at: new Date(2022, 7, 18, 11, 33, 0),
+              hobbies: {
+                create: [],
               },
-              {
-                author_id: user2.id,
-                content: 'ちょっと今東京に来ていて、会いませんか？',
-                created_at: new Date(2022, 7, 18, 11, 36, 0),
-              },
-              {
-                author_id: user1.id,
-                content: 'いいですね！',
-                created_at: new Date(2022, 7, 18, 11, 40, 0),
-              },
-            ],
+            },
           },
         },
-      },
-    });
+      });
+
+      femaleUserIds.push(femaleUser.id);
+    }
+
+    for (let i = 0; i < maleUserNum; i++) {
+      for (let j = 0; j < femaleUserNum; j++) {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion,security/detect-object-injection
+        const maleUserId = maleUserIds[i]!;
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion,security/detect-object-injection
+        const femaleUserId = femaleUserIds[j]!;
+        await client.talk.create({
+          data: {
+            users: {
+              connect: [{ id: maleUserId }, { id: femaleUserId }],
+            },
+            messages: {
+              createMany: {
+                data: [
+                  {
+                    author_id: maleUserId,
+                    content: 'こんにちは！初めまして！',
+                    created_at: new Date(2022, 7, 18, 11, 30, 0),
+                  },
+                  {
+                    author_id: femaleUserId,
+                    content: 'こんにちは！',
+                    created_at: new Date(2022, 7, 18, 11, 33, 0),
+                  },
+                  {
+                    author_id: femaleUserId,
+                    content: 'ちょっと今東京に来ていて、会いませんか？',
+                    created_at: new Date(2022, 7, 18, 11, 36, 0),
+                  },
+                  {
+                    author_id: maleUserId,
+                    content: 'いいですね！',
+                    created_at: new Date(2022, 7, 18, 11, 40, 0),
+                  },
+                ],
+              },
+            },
+          },
+        });
+      }
+    }
   })
   .catch(console.error);

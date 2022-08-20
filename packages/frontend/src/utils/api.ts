@@ -1,7 +1,7 @@
 import { AxiosError, AxiosResponse } from 'axios';
 import { destroyCookie, parseCookies } from 'nookies';
 import { saveCookie } from '@utils/cookie';
-import { AuthApi, ConstantApi, TalksApi, UsersApi } from '@api/api';
+import { AuthApi, ConstantApi, RootApi, TalksApi, UsersApi } from '@api/api';
 import { Configuration } from '@api/configuration';
 
 const configuration = new Configuration({
@@ -17,6 +17,7 @@ export const apiClient = {
   users: new UsersApi(configuration),
   talks: new TalksApi(configuration),
   constant: new ConstantApi(configuration),
+  app: new RootApi(configuration),
 };
 
 export type AuthParameters<F> = F extends (
