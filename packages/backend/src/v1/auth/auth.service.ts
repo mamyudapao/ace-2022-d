@@ -2,7 +2,7 @@ import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/
 import { JwtService } from '@nestjs/jwt';
 import { compare, hash } from 'bcrypt';
 import { randomUUID } from 'crypto';
-import { Gender, Prefecture, User } from '@prisma/client';
+import { Gender, Prefecture, Profile, User } from '@prisma/client';
 import { PrismaService } from '@prisma/prisma.service';
 
 @Injectable()
@@ -31,17 +31,23 @@ export class AuthService {
     if (!(await compare(password, user.password)))
       throw new UnauthorizedException(invalidErrorMessage);
 
-    const payload = {
-      sub: user.id,
-    };
+    const accessToken = this.jwtService.sign(
+      {
+        sub: user.id,
+      },
+      {
+        expiresIn: '15m',
+      }
+    );
 
-    const accessToken = this.jwtService.sign(payload, {
-      expiresIn: '15m',
-    });
-
-    const refreshToken = this.jwtService.sign(payload, {
-      expiresIn: '7d',
-    });
+    const refreshToken = this.jwtService.sign(
+      {
+        sub_refresh: user.id,
+      },
+      {
+        expiresIn: '7d',
+      }
+    );
 
     await this.prismaService.user.update({
       where: { id: user.id },
@@ -61,14 +67,14 @@ export class AuthService {
     refreshToken: string;
   }> {
     let payload: {
-      sub: string;
+      sub_refresh: string;
     };
 
     const invalidErrorMessage = 'Invalid refresh token';
 
     try {
       payload = this.jwtService.verify<{
-        sub: string;
+        sub_refresh: string;
       }>(refreshToken);
     } catch (e) {
       throw new BadRequestException(invalidErrorMessage);
@@ -76,7 +82,7 @@ export class AuthService {
 
     const user = await this.prismaService.user.findUnique({
       where: {
-        id: payload.sub,
+        id: payload.sub_refresh,
       },
     });
 
@@ -123,21 +129,29 @@ export class AuthService {
     if (await this.prismaService.user.findUnique({ where: { email } }))
       throw new BadRequestException('Email is already registered');
 
-    const payload = {
-      sub: randomUUID(),
-    };
+    const userId = randomUUID();
 
-    const accessToken = this.jwtService.sign(payload, {
-      expiresIn: '15m',
-    });
+    const accessToken = this.jwtService.sign(
+      {
+        sub: userId,
+      },
+      {
+        expiresIn: '15m',
+      }
+    );
 
-    const refreshToken = this.jwtService.sign(payload, {
-      expiresIn: '7d',
-    });
+    const refreshToken = this.jwtService.sign(
+      {
+        sub_refresh: userId,
+      },
+      {
+        expiresIn: '7d',
+      }
+    );
 
     await this.prismaService.user.create({
       data: {
-        id: payload.sub,
+        id: userId,
         email,
         nickname,
         password: await hash(password, 10),
@@ -152,5 +166,20 @@ export class AuthService {
       accessToken,
       refreshToken,
     };
+  }
+
+  async getUserFromToken(token: string): Promise<(User & { profile: Profile | null }) | null> {
+    const payload = this.jwtService.verify<{
+      sub: string;
+    }>(token);
+
+    return await this.prismaService.user.findUnique({
+      where: {
+        id: payload.sub,
+      },
+      include: {
+        profile: true,
+      },
+    });
   }
 }

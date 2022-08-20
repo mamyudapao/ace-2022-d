@@ -7,13 +7,11 @@ import BasicProfileStep from '@templates/profile/BasicProfileStep';
 import DatePlanStep from '@templates/profile/DatePlanStep';
 import HobbyGenreStep from '@templates/profile/HobbyGenreStep';
 import HobbyStep from '@templates/profile/HobbyStep';
-import { useAuth } from '@hooks/auth';
-import {
-  useDatePlanCategories,
-  useDatePlans,
-  useHobbies,
-  useHobbyCategories,
-} from '@hooks/constant';
+import { useAuth } from '@hooks/useAuth';
+import { useDatePlanCategories } from '@hooks/useDatePlanCategories';
+import { useDatePlans } from '@hooks/useDatePlans';
+import { useHobbies } from '@hooks/useHobbies';
+import { useHobbyCategories } from '@hooks/useHobbyCategories';
 import { withAuth } from '@hoc/withAuth';
 import { apiClient, handleAuth } from '@utils/api';
 import {
@@ -63,7 +61,9 @@ const Profile = (props: { step: string }) => {
       hobbies: selectedHobbies,
       avatar,
     });
-    await mutate(res);
+    await mutate(res, {
+      revalidate: false,
+    });
   }, [
     avatar,
     education,

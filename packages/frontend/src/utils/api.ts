@@ -1,7 +1,7 @@
 import { AxiosError, AxiosResponse } from 'axios';
 import { destroyCookie, parseCookies } from 'nookies';
 import { saveCookie } from '@utils/cookie';
-import { AuthApi, ConstantApi, UsersApi } from '@api/api';
+import { AuthApi, ConstantApi, TalksApi, UsersApi } from '@api/api';
 import { Configuration } from '@api/configuration';
 
 const configuration = new Configuration({
@@ -15,6 +15,7 @@ const configuration = new Configuration({
 export const apiClient = {
   auth: new AuthApi(configuration),
   users: new UsersApi(configuration),
+  talks: new TalksApi(configuration),
   constant: new ConstantApi(configuration),
 };
 
@@ -27,7 +28,7 @@ export type AuthParameters<F> = F extends (
 
 export type ApiResponse<F> = F extends Promise<AxiosResponse<infer R>> ? R : never;
 
-async function refresh(refreshToken: string) {
+export async function refresh(refreshToken: string) {
   const {
     data: { access_token: refreshedAccessToken, refresh_token: refreshedRefreshToken },
   } = await apiClient.auth
@@ -43,7 +44,7 @@ async function refresh(refreshToken: string) {
   saveCookie('access_token', refreshedAccessToken);
   refreshedRefreshToken && saveCookie('refresh_token', refreshedRefreshToken);
 
-  return refreshedRefreshToken;
+  return refreshedAccessToken;
 }
 
 export function handleToken<T extends Promise<AxiosResponse>>(

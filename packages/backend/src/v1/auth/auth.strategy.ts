@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Request } from 'express';
 import { ExtractJwt, JwtFromRequestFunction, Strategy } from 'passport-jwt';
-import { User } from '@prisma/client';
+import { Profile, User } from '@prisma/client';
 import { PrismaService } from '@prisma/prisma.service';
 
 @Injectable()
@@ -20,10 +20,10 @@ export class AuthStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: { sub?: string }) {
+  async validate(payload: { sub?: string }): Promise<User & { profile: Profile | null }> {
     if (!payload.sub) throw new UnauthorizedException('Invalid access token');
 
-    const user: User | null = await this.prismaService.user.findUnique({
+    const user = await this.prismaService.user.findUnique({
       where: {
         id: payload.sub,
       },

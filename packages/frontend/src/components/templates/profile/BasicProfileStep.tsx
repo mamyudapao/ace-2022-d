@@ -50,6 +50,8 @@ const BasicProfileStep = (props: BasicProfileStepProps) => {
       case 'THIN':
         return '細め';
     }
+
+    return '不明';
   }, []);
 
   useEffect(() => {
@@ -71,6 +73,8 @@ const BasicProfileStep = (props: BasicProfileStepProps) => {
       case 'OTHER':
         return 'その他';
     }
+
+    return '不明';
   }, []);
 
   useEffect(() => {
@@ -92,6 +96,8 @@ const BasicProfileStep = (props: BasicProfileStepProps) => {
       case 'OVER_1000':
         return '1000万円以上';
     }
+
+    return '不明';
   }, []);
 
   useEffect(() => {
@@ -113,6 +119,8 @@ const BasicProfileStep = (props: BasicProfileStepProps) => {
       case 'DONT_KNOW':
         return '不明';
     }
+
+    return '不明';
   }, []);
 
   useEffect(() => {
@@ -131,6 +139,8 @@ const BasicProfileStep = (props: BasicProfileStepProps) => {
         case 'NO_PLAN':
           return '計画なし';
       }
+
+      return '不明';
     },
     []
   );

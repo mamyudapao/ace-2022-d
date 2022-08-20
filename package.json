@@ -21,20 +21,19 @@
     "postinstall": "husky install && yarn backend apigen && yarn frontend apigen"
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.0.2",
-    "@commitlint/config-conventional": "^17.0.2",
+    "@commitlint/cli": "^17.0.3",
+    "@commitlint/config-conventional": "^17.0.3",
     "@emotion/eslint-plugin": "^11.10.0",
     "@stylelint/postcss-css-in-js": "^0.38.0",
     "@trivago/prettier-plugin-sort-imports": "^3.3.0",
-    "@types/node": "18.7.2",
-    "@typescript-eslint/eslint-plugin": "^5.33.0",
-    "@typescript-eslint/parser": "^5.33.0",
-    "eslint": "^8.20.0",
+    "@types/node": "18.7.6",
+    "@typescript-eslint/eslint-plugin": "5.33.1",
+    "@typescript-eslint/parser": "5.33.1",
+    "eslint": "8.22.0",
     "eslint-config-next": "12.2.5",
     "eslint-config-prettier": "^8.5.0",
     "eslint-import-resolver-typescript": "3.4.1",
     "eslint-plugin-array-func": "^3.1.7",
-    "eslint-plugin-boundaries": "^2.10.1",
     "eslint-plugin-no-constructor-bind": "^2.0.4",
     "eslint-plugin-no-use-extend-native": "^0.5.0",
     "eslint-plugin-only-warn": "^1.0.3",
@@ -61,6 +60,6 @@
     "stylelint-declaration-block-no-ignored-properties": "^2.5.0",
     "stylelint-group-selectors": "^1.0.9",
     "stylelint-high-performance-animation": "^1.6.0",
-    "typescript": "^4.7.2"
+    "typescript": "^4.7.4"
   }
 }

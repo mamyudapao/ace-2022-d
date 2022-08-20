@@ -7,4 +7,3 @@ node_modules
 packages/backend/dist
 packages/frontend/src/api
 packages/frontend/.next
-packages/frontend/out

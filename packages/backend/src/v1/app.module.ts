@@ -5,6 +5,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { AppController } from '@v1/app.controller';
 import { AuthModule } from '@auth/auth.module';
 import { UserModule } from '@user/user.module';
+import { TalkModule } from '@talk/talk.module';
 import { PrismaModule } from '@prisma/prisma.module';
 import { ConstantModule } from '@constant/constant.module';
 
@@ -14,6 +15,7 @@ import { ConstantModule } from '@constant/constant.module';
     PrismaModule,
     AuthModule,
     UserModule,
+    TalkModule,
     ConstantModule,
     CacheModule.register(),
     ConfigModule.forRoot({

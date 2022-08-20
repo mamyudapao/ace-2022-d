@@ -2,58 +2,113 @@ import styled from '@emotion/styled';
 import { InputBase, Typography } from '@mui/material';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { useCallback, useState } from 'react';
+import { KeyboardEvent } from 'react';
 import { FiArrowLeft } from 'react-icons/fi';
 import { TbCamera } from 'react-icons/tb';
+import { useAuth } from '@hooks/useAuth';
+import { useSocket } from '@hooks/useSocket';
+import { useTalk } from '@hooks/useTalk';
+import { apiClient, handleToken } from '@utils/api';
+import { TalkResponse, UserResponse } from '@api/model';
 
 const MessageRoom = () => {
+  useSocket();
+
   const router = useRouter();
+  const talkId = router.query['id']?.toString() ?? '';
+
+  const { data: user } = useAuth();
+  const { data: talk, state } = useTalk(talkId);
+
+  const getPairUser: (talk: TalkResponse | undefined) => UserResponse | null = useCallback(
+    (talk: TalkResponse | undefined) => talk?.users.find(u => u.id !== user?.id) ?? null,
+    [user?.id]
+  );
+
+  if (state === 'error') {
+    void router.push('/404');
+    return null;
+  }
 
   return (
     <div className="flex h-screen w-screen flex-col justify-between gap-6 overflow-hidden p-4">
       <div className="flex flex-1 flex-col overflow-hidden">
-        <div className="flex items-center py-2">
+        <div className="flex items-center pt-2 pb-3">
           <FiArrowLeft className="mr-3 cursor-pointer" size={32} onClick={router.back} />
-          <Image className="rounded-full" src="/avatar.jpg" width={32} height={32} alt="" />
+          {talk && (
+            <Image
+              className="rounded-full"
+              src={getPairUser(talk)?.profile?.avatar ?? ''}
+              width={32}
+              height={32}
+              alt=""
+            />
+          )}
           <Typography className="ml-2 text-lg" variant="h6">
-            なつき
+            {getPairUser(talk)?.nickname}
           </Typography>
         </div>
         <div className="flex flex-1 flex-col gap-2 overflow-y-auto">
-          <Message content="こんにちは！" isSelf={true} />
-          <Message
-            content="じゃあ、デートの日は12月の27日で決定ですね！楽しみです！"
-            isSelf={false}
-          />
-          <Message content="楽しみですねー！どのあたりで飲みますか？" isSelf={true} />
-          <Message content="予定入れておきます！" isSelf={true} />
-          <Message content="新宿あたりどうでしょう、渋谷でもOKです！" isSelf={false} />
-          <Message content="何時にしましょう？" isSelf={false} />
-          <Message
-            content="こことか超いいと思うんだけど興味ありません？https://tabelog.com/tokyo/A1318/A131805/13132982/"
-            isSelf={true}
-          />
-          <Message content="とてもいいと思います！" isSelf={false} />
+          {talk?.messages.map(message => (
+            <Message
+              key={message.id}
+              content={message.content ?? ''}
+              time={new Date(message.created_at)}
+              isSelf={message.author_id === user?.id}
+              avatar={getPairUser(talk)?.profile?.avatar ?? ''}
+            />
+          ))}
         </div>
       </div>
       <div className="flex flex-none items-center gap-4">
         <TbCamera size={24} color="#A1A6B5" />
-        <InputBase
-          placeholder="メッセージを入力"
-          className="flex-1"
-          sx={{
-            background: 'rgba(48, 61, 80, 0.05)',
-            border: '1px solid rgba(48, 61, 80, 0.05);',
-            borderRadius: 18,
-            paddingLeft: '14px',
-          }}
-        />
+        <MessageInput talkId={talkId} />
       </div>
     </div>
   );
 };
 
+interface MessageInputProps {
+  talkId: string;
+}
+
+const MessageInput = (props: MessageInputProps) => {
+  const [message, setMessage] = useState<string>('');
+
+  return (
+    <InputBase
+      placeholder="メッセージを入力"
+      className="flex-1"
+      sx={{
+        background: 'rgba(48, 61, 80, 0.05)',
+        border: '1px solid rgba(48, 61, 80, 0.05);',
+        borderRadius: 18,
+        paddingLeft: '14px',
+      }}
+      value={message}
+      onChange={e => setMessage(e.currentTarget.value)}
+      onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => {
+        if (e.key !== 'Enter') {
+          return;
+        }
+
+        handleToken(token =>
+          apiClient.talks.postMessage(props.talkId, `Bearer ${token}`, {
+            content: e.currentTarget.value,
+          })
+        ).catch(console.error);
+
+        setMessage('');
+      }}
+    />
+  );
+};
+
 interface MessageProps {
   content: string;
+  avatar: string;
+  time: Date;
   isSelf: boolean;
 }
 
@@ -83,7 +138,7 @@ const Message = (props: MessageProps) => {
       {!props.isSelf && (
         <Image
           className="rounded-full"
-          src="/avatar.jpg"
+          src={props.avatar}
           width={40}
           height={40}
           layout="fixed"
@@ -92,7 +147,8 @@ const Message = (props: MessageProps) => {
       )}
       <MessageContent>{props.content}</MessageContent>
       <Typography className="self-end" variant="subtitle2" fontSize="10px">
-        21:03
+        {props.time.getHours().toString().padStart(2, '0')}:
+        {props.time.getMinutes().toString().padStart(2, '0')}
       </Typography>
     </MessageLine>
   );

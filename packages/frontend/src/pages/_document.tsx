@@ -1,8 +1,4 @@
-import createEmotionServer from '@emotion/server/create-instance';
-import { AppType, RenderPageResult } from 'next/dist/shared/lib/utils';
-import Document, { DocumentContext, Head, Html, Main, NextScript } from 'next/document';
-import React from 'react';
-import { emotionCache } from '@utils/cache';
+import Document, { Head, Html, Main, NextScript } from 'next/document';
 
 class _Document extends Document {
   render() {
@@ -127,35 +123,5 @@ class _Document extends Document {
     );
   }
 }
-
-_Document.getInitialProps = async (ctx: DocumentContext) => {
-  const originalRenderPage = ctx.renderPage;
-
-  const { extractCriticalToChunks } = createEmotionServer(emotionCache);
-
-  ctx.renderPage = (): RenderPageResult | Promise<RenderPageResult> =>
-    originalRenderPage({
-      enhanceApp:
-        (App: AppType) =>
-        (props): JSX.Element =>
-          <App {...props} />,
-    });
-
-  const initialProps = await Document.getInitialProps(ctx);
-  const emotionStyles = extractCriticalToChunks(initialProps.html);
-  const emotionStyleTags = emotionStyles.styles.map(style => (
-    <style
-      data-emotion={`${style.key} ${style.ids.join(' ')}`}
-      key={style.key}
-      dangerouslySetInnerHTML={{ __html: style.css }}
-    />
-  ));
-
-  return {
-    ...initialProps,
-    html: emotionStyles.html,
-    styles: [...React.Children.toArray(initialProps.styles), ...emotionStyleTags],
-  };
-};
 
 export default _Document;

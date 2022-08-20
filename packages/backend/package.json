@@ -5,8 +5,7 @@
   "scripts": {
     "start:dev": "prisma migrate dev && nest start --watch",
     "start:production": "prisma migrate deploy && nest start",
-    "seed:dev": "prisma migrate reset -f && ts-node src/seed/seed.dev.ts",
-    "seed:production": "prisma migrate reset -f && ts-node src/seed/seed.prod.ts",
+    "seed": "prisma migrate reset -f && ts-node src/seed.ts",
     "build": "nest build",
     "apigen": "prisma generate && nest start --config apigen.json"
   },
@@ -17,8 +16,10 @@
     "@nestjs/jwt": "^9.0.0",
     "@nestjs/passport": "^9.0.0",
     "@nestjs/platform-express": "^9.0.8",
+    "@nestjs/platform-socket.io": "^9.0.11",
     "@nestjs/swagger": "^6.0.5",
     "@nestjs/throttler": "^3.0.0",
+    "@nestjs/websockets": "^9.0.11",
     "@prisma/client": "^4.2.1",
     "bcrypt": "^5.0.1",
     "cache-manager": "^4.1.0",

@@ -3,7 +3,7 @@ import { Fetcher, KeyedMutator, SWRConfiguration } from 'swr';
 import useSWRImmutable from 'swr/immutable';
 import { ApiResponse, AuthParameters, handleAuth } from '@utils/api';
 
-type SWRResponseType<Data> =
+export type SWRResponseType<Data> =
   | {
       data: undefined;
       state: 'loading';
@@ -55,12 +55,17 @@ export function useSWRFormatted<Data, Key>(
   };
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const useApiHandled = <F extends (...args: any) => Promise<AxiosResponse>>(
+export function useApiHandled<
+  Key,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  F extends (authorization: string, ...args: any) => Promise<AxiosResponse>
+>(
+  key: Key,
   fn: F | null,
   ...parameters: AuthParameters<F>
-): SWRResponseType<ApiResponse<ReturnType<F>>> =>
-  useSWRFormatted(
-    fn ? [fn.name, ...parameters] : null,
+): SWRResponseType<ApiResponse<ReturnType<F>>> {
+  return useSWRFormatted(
+    fn ? [key, ...parameters] : null,
     fn ? () => handleAuth(fn, ...parameters) : null
   );
+}

@@ -32,8 +32,9 @@ const LastStep = (props: LastStepProps) => {
           color="primary"
           disabled={isLoading}
           fullWidth
-          // eslint-disable-next-line @typescript-eslint/no-misused-promises
-          onClick={register}
+          onClick={() => {
+            register().catch(console.error);
+          }}
         >
           登録する
         </Button>

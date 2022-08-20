@@ -3,8 +3,6 @@ import { Button, Divider, TextField, Typography } from '@mui/material';
 import { AxiosError } from 'axios';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { GetServerSidePropsContext } from 'next/types';
-import { parseCookies } from 'nookies';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
@@ -13,7 +11,7 @@ import { FcGoogle } from 'react-icons/fc';
 import { HiXCircle } from 'react-icons/hi';
 import { z } from 'zod';
 import PreviousLayout from '@organisms/PreviousLayout';
-import { useAuth } from '@hooks/auth';
+import { useAuth } from '@hooks/useAuth';
 import { apiClient } from '@utils/api';
 import { saveCookie } from '@utils/cookie';
 
@@ -74,7 +72,8 @@ const Login = () => {
               .catch((e: AxiosError) => {
                 if (e.response?.status === 401) setError(true);
                 else throw e;
-              });
+              })
+              .catch(() => setLoading(false));
 
             if (res) {
               const { access_token: accessToken, refresh_token: refreshToken } = res.data;
@@ -206,22 +205,6 @@ const Login = () => {
       </PreviousLayout>
     </>
   );
-};
-
-export const getServerSideProps = (ctx: GetServerSidePropsContext) => {
-  const { access_token: accessToken, refresh_token: refreshToken } = parseCookies(ctx);
-  if (accessToken && refreshToken) {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {},
-  };
 };
 
 export default Login;

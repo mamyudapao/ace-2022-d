@@ -33,6 +33,7 @@
       "@auth/*": ["./src/v1/auth/*"],
       "@user/*": ["./src/v1/user/*"],
       "@prisma/*": ["./src/v1/prisma/*"],
+      "@talk/*": ["./src/v1/talk/*"],
       "@constant/*": ["./src/v1/constant/*"]
     }
   }

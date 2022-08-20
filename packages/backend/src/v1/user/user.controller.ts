@@ -3,7 +3,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { UseAuth } from '@auth/auth.decorator';
 import { UpdateUserRequest, UserResponse } from '@user/user.entity';
 import { UserService } from '@user/user.service';
-import { Profile, User } from '@prisma/client';
+import { Profile, Talk, User } from '@prisma/client';
 
 @Controller({
   path: '/users',
@@ -15,7 +15,9 @@ export class UserController {
 
   @Get('/@me')
   @UseAuth()
-  me(@Req() request: { user: User & { profile: Profile | null } }): UserResponse {
+  me(
+    @Req() request: { user: User & { profile: Profile | null; talks: Talk[] | null } }
+  ): UserResponse {
     return {
       id: request.user.id,
       email: request.user.email,
@@ -32,7 +34,7 @@ export class UserController {
   @Put('/@me')
   @UseAuth()
   async updateMe(
-    @Req() request: { user: User },
+    @Req() request: { user: User & { profile: Profile | null; talks: Talk[] | null } },
     @Body() updateUserRequest: UpdateUserRequest
   ): Promise<UserResponse> {
     const result = await this.userService.updateUser(request.user.id, updateUserRequest);
@@ -51,7 +53,10 @@ export class UserController {
 
   @Get('/:id')
   @UseAuth()
-  async getUser(@Req() request: { user: User }, @Param('id') id: string): Promise<UserResponse> {
+  async getUser(
+    @Req() request: { user: User & { profile: Profile | null; talks: Talk[] | null } },
+    @Param('id') id: string
+  ): Promise<UserResponse> {
     const result = await this.userService.getUser(id);
     return {
       id: result.id,

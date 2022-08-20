@@ -11,7 +11,7 @@ import LastStep from '@templates/register/LastStep';
 import NicknameStep from '@templates/register/NicknameStep';
 import PasswordStep from '@templates/register/PasswordStep';
 import PrefectureStep from '@templates/register/PrefectureStep';
-import { useAuth } from '@hooks/auth';
+import { useAuth } from '@hooks/useAuth';
 import { apiClient } from '@utils/api';
 import { saveCookie } from '@utils/cookie';
 import { RegisterRequestGenderEnum, RegisterRequestPrefectureEnum } from '@api/model';

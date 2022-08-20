@@ -2,12 +2,57 @@ import { Avatar, Tab, Tabs, Typography } from '@mui/material';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useCallback } from 'react';
 import { BsCheckCircleFill } from 'react-icons/bs';
 import FooterLayout from '@organisms/FooterLayout';
+import { useAuth } from '@hooks/useAuth';
+import { useSocket } from '@hooks/useSocket';
+import { useTalks } from '@hooks/useTalks';
 import { withAuth } from '@hoc/withAuth';
 import { withProfile } from '@hoc/withProfile';
+import { TalksResponse, UserResponse } from '@api/model';
 
 const Talks = () => {
+  useSocket();
+
+  const { data: user } = useAuth();
+  const { data: talks } = useTalks();
+
+  const getPairUser: (talk: TalksResponse) => UserResponse | null = useCallback(
+    (talk: TalksResponse) => talk.users.find(u => u.id !== user?.id) ?? null,
+    [user?.id]
+  );
+
+  const getDifferenceText: (date: Date) => string = useCallback((date: Date) => {
+    const diffRaw = new Date().getTime() - date.getTime();
+
+    if (diffRaw < 1000) {
+      return 'すぐ';
+    }
+
+    if (diffRaw < 60000) {
+      return `${Math.round(diffRaw / 1000)}秒前`;
+    }
+
+    if (diffRaw < 3600000) {
+      return `${Math.round(diffRaw / 60000)}分前`;
+    }
+
+    if (diffRaw < 86400000) {
+      return `${Math.round(diffRaw / 3600000)}時間前`;
+    }
+
+    if (diffRaw < 604800000) {
+      return `${Math.round(diffRaw / 86400000)}日前`;
+    }
+
+    if (diffRaw < 2592000000) {
+      return `${Math.round(diffRaw / 604800000)}週間前`;
+    }
+
+    return `${Math.round(diffRaw / 2592000000)}ヶ月前`;
+  }, []);
+
   return (
     <>
       <Head>
@@ -18,75 +63,27 @@ const Talks = () => {
           <Typography className="my-4" variant="h6" align="center" color="black">
             やりとり
           </Typography>
-          <Tabs variant="fullWidth" value="message" centered>
-            <Tab value="matching" label="マッチング" />
-            <Tab value="message" label="メッセージ" />
+          <Tabs variant="fullWidth" value={1} centered>
+            <Tab label="マッチング" />
+            <Tab label="メッセージ" />
           </Tabs>
         </div>
         <div className="flex flex-1 flex-col gap-6 divide-y overflow-y-auto p-4">
-          <MessageLine
-            name="bn004812"
-            avatar="/avatar.jpg"
-            latestMessage="ぜひ行きましょう！土曜日だったらおいしい"
-            latestMessageDate="10分前"
-            unreadMessageCount={3}
-          />
-          <MessageLine
-            name="2n001418"
-            avatar="/avatar.jpg"
-            latestMessage="はじめまして。マッチありがとうございます"
-            latestMessageDate="16:21"
-            unreadMessageCount={0}
-          />
-          <MessageLine
-            name="8n003140"
-            avatar="/avatar.jpg"
-            latestMessage="初めまして！よろしくお願いします。"
-            latestMessageDate="木曜日"
-            unreadMessageCount={0}
-          />
-          <MessageLine
-            name="8n002414"
-            avatar="/avatar.jpg"
-            latestMessage="あいう"
-            latestMessageDate="木曜日"
-            unreadMessageCount={0}
-          />
-          <MessageLine
-            name="8n002414"
-            avatar="/avatar.jpg"
-            latestMessage="あいう"
-            latestMessageDate="木曜日"
-            unreadMessageCount={0}
-          />
-          <MessageLine
-            name="8n002414"
-            avatar="/avatar.jpg"
-            latestMessage="あいう"
-            latestMessageDate="木曜日"
-            unreadMessageCount={0}
-          />
-          <MessageLine
-            name="8n002414"
-            avatar="/avatar.jpg"
-            latestMessage="あいう"
-            latestMessageDate="木曜日"
-            unreadMessageCount={0}
-          />
-          <MessageLine
-            name="8n002414"
-            avatar="/avatar.jpg"
-            latestMessage="あいう"
-            latestMessageDate="7/12"
-            unreadMessageCount={0}
-          />
-          <MessageLine
-            name="8n002414"
-            avatar="/avatar.jpg"
-            latestMessage="あいう"
-            latestMessageDate="7/12"
-            unreadMessageCount={0}
-          />
+          {talks?.map(talk => (
+            <MessageLine
+              key={talk.id}
+              id={talk.id}
+              name={getPairUser(talk)?.nickname ?? ''}
+              avatar={getPairUser(talk)?.profile?.avatar ?? ''}
+              latestMessage={talk.latest_message?.content ?? ''}
+              latestMessageDate={
+                talk.latest_message
+                  ? getDifferenceText(new Date(talk.latest_message.created_at))
+                  : ''
+              }
+              unreadMessageCount={talk.unread_message_count}
+            />
+          ))}
         </div>
       </FooterLayout>
     </>
@@ -94,6 +91,7 @@ const Talks = () => {
 };
 
 interface MessageLineProps {
+  id: string;
   name: string;
   avatar: string;
   latestMessage: string;
@@ -103,7 +101,7 @@ interface MessageLineProps {
 
 const MessageLine = (props: MessageLineProps) => {
   return (
-    <Link href="/talks/1">
+    <Link href={`/talks/${props.id}`}>
       <div className="flex cursor-pointer items-center gap-4">
         <Image className="rounded-full" src={props.avatar} width={56} height={56} alt="" />
         <div className="flex flex-1 overflow-x-hidden">
