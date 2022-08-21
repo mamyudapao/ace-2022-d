@@ -9,7 +9,6 @@ export class UserService {
 
   async getUser(
     id: string
-    // eslint-disable-next-line @typescript-eslint/naming-convention
   ): Promise<User & { profile: (Profile & { date_plans: DatePlan[]; hobbies: Hobby[] }) | null }> {
     const result = await this.prismaService.user.findUnique({
       where: {
@@ -30,58 +29,46 @@ export class UserService {
     return result;
   }
 
-  // TODO: include date_plans and hobbies
   async updateUser(
     id: string,
     data: UpdateUserRequest
   ): Promise<User & { profile: Profile | null }> {
+    await this.prismaService.profile.update({
+      where: {
+        user_id: id,
+      },
+      data: {
+        description: data.description,
+        avatar: data.avatar,
+        height: data.height,
+        weight: data.weight,
+        education: data.education,
+        income: data.income,
+        holiday: data.holiday,
+        work_prefecture: data.work_prefecture,
+        born_prefecture: data.born_prefecture,
+        blood_type: data.blood_type,
+        marry_intention: data.marry_intention,
+        date_plans: {
+          connect: data.date_plans?.map(plan => ({ id: plan })),
+        },
+        hobbies: {
+          connect: data.hobbies?.map(hobby => ({ id: hobby })),
+        },
+      },
+    });
     return await this.prismaService.user.update({
       where: { id },
       data: {
         prefecture: data.prefecture,
-        profile: {
-          create: {
-            description: data.description,
-            avatar: data.avatar,
-            height: data.height,
-            weight: data.weight,
-            education: data.education,
-            income: data.income,
-            holiday: data.holiday,
-            work_prefecture: data.work_prefecture,
-            born_prefecture: data.born_prefecture,
-            blood_type: data.blood_type,
-            marry_intention: data.marry_intention,
-            date_plans: {
-              connect: data.date_plans?.map(plan => ({ id: plan })),
-            },
-            hobbies: {
-              connect: data.hobbies?.map(hobby => ({ id: hobby })),
-            },
-          },
-          update: {
-            description: data.description,
-            avatar: data.avatar,
-            height: data.height,
-            weight: data.weight,
-            education: data.education,
-            income: data.income,
-            holiday: data.holiday,
-            work_prefecture: data.work_prefecture,
-            born_prefecture: data.born_prefecture,
-            blood_type: data.blood_type,
-            marry_intention: data.marry_intention,
-            date_plans: {
-              connect: data.date_plans?.map(plan => ({ id: plan })),
-            },
-            hobbies: {
-              connect: data.hobbies?.map(hobby => ({ id: hobby })),
-            },
-          },
-        },
       },
       include: {
-        profile: true,
+        profile: {
+          include: {
+            date_plans: true,
+            hobbies: true,
+          },
+        },
       },
     });
   }
