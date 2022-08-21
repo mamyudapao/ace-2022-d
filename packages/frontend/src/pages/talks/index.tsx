@@ -18,6 +18,12 @@ const Talks = () => {
   const { data: user } = useAuth();
   const { data: talks } = useTalks();
 
+  const sortedTalks = talks?.concat()?.sort((a, b) => {
+    const aTime = new Date(a.latest_message?.created_at ?? '');
+    const bTime = new Date(b.latest_message?.created_at ?? '');
+    return bTime.getTime() - aTime.getTime();
+  });
+
   const getPairUser: (talk: TalksResponse) => UserResponse | null = useCallback(
     (talk: TalksResponse) => talk.users.find(u => u.id !== user?.id) ?? null,
     [user?.id]
@@ -26,31 +32,34 @@ const Talks = () => {
   const getDifferenceText: (date: Date) => string = useCallback((date: Date) => {
     const diffRaw = new Date().getTime() - date.getTime();
 
-    if (diffRaw < 1000) {
-      return 'すぐ';
-    }
-
     if (diffRaw < 60000) {
-      return `${Math.round(diffRaw / 1000)}秒前`;
+      return `たった今`;
     }
 
     if (diffRaw < 3600000) {
       return `${Math.round(diffRaw / 60000)}分前`;
     }
 
+    if (diffRaw < 21600000) {
+      return `${Math.round(diffRaw / 60000)}時間前`;
+    }
+
     if (diffRaw < 86400000) {
-      return `${Math.round(diffRaw / 3600000)}時間前`;
+      return `${date.getHours()}:${date.getMinutes().toString().padStart(2)}`;
+    }
+
+    if (diffRaw < 172800000) {
+      return `昨日`;
     }
 
     if (diffRaw < 604800000) {
-      return `${Math.round(diffRaw / 86400000)}日前`;
+      return ['日', '月', '火', '水', '木', '金', '土'][date.getDay()] ?? '';
     }
 
-    if (diffRaw < 2592000000) {
-      return `${Math.round(diffRaw / 604800000)}週間前`;
-    }
-
-    return `${Math.round(diffRaw / 2592000000)}ヶ月前`;
+    return `${date.getFullYear()}/${(date.getMonth() + 1).toString().padStart(2)}/${date
+      .getDate()
+      .toString()
+      .padStart(2)}`;
   }, []);
 
   return (
@@ -69,7 +78,7 @@ const Talks = () => {
           </Tabs>
         </div>
         <div className="flex flex-1 flex-col gap-6 divide-y overflow-y-auto p-4">
-          {talks?.map(talk => (
+          {sortedTalks?.map(talk => (
             <MessageLine
               key={talk.id}
               id={talk.id}

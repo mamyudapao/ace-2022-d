@@ -74,15 +74,16 @@ model HobbyCategory {
 }
 
 model Message {
-  id         String    @id @default(uuid())
-  talk       Talk      @relation(fields: [talk_id], references: [id])
-  talk_id    String
-  author     User      @relation(fields: [author_id], references: [id])
-  author_id  String
-  content    String?
-  attachment String?
-  created_at DateTime  @default(now())
-  deleted_at DateTime?
+  id            String          @id @default(uuid())
+  talk          Talk            @relation(fields: [talk_id], references: [id])
+  talk_id       String
+  author        User            @relation(fields: [author_id], references: [id])
+  author_id     String
+  content       String?
+  attachment    String?
+  created_at    DateTime        @default(now())
+  deleted_at    DateTime?
+  UnreadMessage UnreadMessage[]
 }
 
 model Talk {
@@ -94,12 +95,14 @@ model Talk {
 }
 
 model UnreadMessage {
-  id      String @id @default(uuid())
-  user    User   @relation(fields: [user_id], references: [id])
-  user_id String
-  talk    Talk   @relation(fields: [talk_id], references: [id])
-  talk_id String
-  count   Int
+  user       User    @relation(fields: [user_id], references: [id])
+  user_id    String
+  talk       Talk    @relation(fields: [talk_id], references: [id])
+  talk_id    String
+  message    Message @relation(fields: [message_id], references: [id])
+  message_id String
+
+  @@id([user_id, talk_id])
 }
 
 enum Gender {

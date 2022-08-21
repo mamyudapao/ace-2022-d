@@ -25,37 +25,41 @@ export class TalkController {
   ): Promise<TalksResponse[]> {
     const talks = await this.talkService.getTalks();
 
-    return talks
-      .filter(talk => talk.users.some(user => user.id === request.user.id))
-      .map(talk => {
-        const latestMessage = talk.messages[0];
+    return Promise.all(
+      talks
+        .filter(talk => talk.users.some(user => user.id === request.user.id))
+        .map(async talk => {
+          const latestMessage = talk.messages[0];
 
-        return {
-          id: talk.id,
-          users: talk.users.map(user => ({
-            id: user.id,
-            email: null,
-            nickname: user.nickname,
-            gender: user.gender,
-            birthday: user.birthday,
-            prefecture: user.prefecture,
-            profile: user.profile,
-            created_at: user.created_at,
-            updated_at: user.updated_at,
-          })),
-          latest_message: latestMessage
-            ? {
-                id: latestMessage.id,
-                talk_id: latestMessage.talk_id,
-                author_id: latestMessage.author_id,
-                content: latestMessage.content,
-                created_at: latestMessage.created_at,
-              }
-            : null,
-          unread_message_count:
-            talk.unread_messages.find(u => u.user_id === request.user.id)?.count ?? 0,
-        };
-      });
+          return {
+            id: talk.id,
+            users: talk.users.map(user => ({
+              id: user.id,
+              email: null,
+              nickname: user.nickname,
+              gender: user.gender,
+              birthday: user.birthday,
+              prefecture: user.prefecture,
+              profile: user.profile,
+              created_at: user.created_at,
+              updated_at: user.updated_at,
+            })),
+            latest_message: latestMessage
+              ? {
+                  id: latestMessage.id,
+                  talk_id: latestMessage.talk_id,
+                  author_id: latestMessage.author_id,
+                  content: latestMessage.content,
+                  created_at: latestMessage.created_at,
+                }
+              : null,
+            unread_message_count: await this.talkService.getUnreadMessageCount(
+              talk.id,
+              request.user.id
+            ),
+          };
+        })
+    );
   }
 
   @UseAuth()
@@ -116,5 +120,14 @@ export class TalkController {
       content: result.content,
       created_at: result.created_at,
     };
+  }
+
+  @UseAuth()
+  @Post('/:id/read')
+  async markAsRead(
+    @Req() request: { user: User & { profile: Profile | null; talks: Talk[] | null } },
+    @Param('id') id: string
+  ): Promise<void> {
+    await this.talkService.markAsRead(id, request.user.id);
   }
 }

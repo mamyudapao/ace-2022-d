@@ -81,4 +81,60 @@ export class TalkService {
     } as MessageResponse);
     return result;
   }
+
+  async getUnreadMessageCount(talkId: string, userId: string): Promise<number> {
+    const unreadMessage = await this.prismaService.unreadMessage.findUnique({
+      where: {
+        user_id_talk_id: {
+          talk_id: talkId,
+          user_id: userId,
+        },
+      },
+      include: {
+        message: true,
+      },
+    });
+
+    if (!unreadMessage) return 0;
+
+    return await this.prismaService.message.count({
+      where: {
+        created_at: {
+          lt: unreadMessage.message.created_at,
+        },
+      },
+    });
+  }
+
+  async markAsRead(talkId: string, userId: string): Promise<void> {
+    const latestMessage = await this.prismaService.message.findFirst({
+      where: {
+        talk_id: talkId,
+        author_id: userId,
+      },
+      orderBy: {
+        created_at: 'asc',
+      },
+      take: 1,
+    });
+
+    if (!latestMessage) return;
+
+    await this.prismaService.unreadMessage.upsert({
+      where: {
+        user_id_talk_id: {
+          talk_id: talkId,
+          user_id: userId,
+        },
+      },
+      create: {
+        talk_id: talkId,
+        user_id: userId,
+        message_id: latestMessage.id,
+      },
+      update: {
+        message_id: latestMessage.id,
+      },
+    });
+  }
 }

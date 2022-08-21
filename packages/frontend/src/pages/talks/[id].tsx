@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { InputBase, Typography } from '@mui/material';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { KeyboardEvent } from 'react';
 import { FiArrowLeft } from 'react-icons/fi';
 import { TbCamera } from 'react-icons/tb';
@@ -19,12 +19,18 @@ const MessageRoom = () => {
   const talkId = router.query['id']?.toString() ?? '';
 
   const { data: user } = useAuth();
-  const { data: talk, state } = useTalk(talkId);
+  const { data: talk, state, markAsRead } = useTalk(talkId);
 
   const getPairUser: (talk: TalkResponse | undefined) => UserResponse | null = useCallback(
     (talk: TalkResponse | undefined) => talk?.users.find(u => u.id !== user?.id) ?? null,
     [user?.id]
   );
+
+  useEffect(() => {
+    if (state === 'success') {
+      markAsRead().catch(console.error);
+    }
+  }, [state, markAsRead, talk?.messages]);
 
   if (state === 'error') {
     void router.push('/404');
