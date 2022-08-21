@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "start:dev": "prisma migrate dev && nest start --watch",
-    "start:production": "prisma migrate deploy && nest start",
+    "start:production": "prisma migrate deploy && prisma migrate reset -f && ts-node src/seed.ts && nest start",
     "seed": "prisma migrate reset -f && ts-node src/seed.ts",
     "build": "nest build",
     "apigen": "prisma generate && nest start --config apigen.json"
