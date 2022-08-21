@@ -395,7 +395,7 @@ prisma
       const maleUser = await client.user.create({
         data: {
           email: 'user' + i.toString() + '@example.com',
-          nickname: 'テストユーザー' + i.toString(),
+          nickname: 'ユーザー' + i.toString(),
           password: hashSync('password', 10),
           refresh_token: '',
           gender: 'MALE',
@@ -433,7 +433,7 @@ prisma
       const femaleUser = await client.user.create({
         data: {
           email: 'user' + (i + maleUserNum).toString() + '@example.com',
-          nickname: 'テストユーザー' + (i + maleUserNum).toString(),
+          nickname: 'ユーザー' + (i + maleUserNum).toString(),
           password: hashSync('password', 10),
           refresh_token: '',
           gender: 'FEMALE',
