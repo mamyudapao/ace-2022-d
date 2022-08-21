@@ -256,18 +256,19 @@ const Mypage = () => {
           <MdVerifiedUser color="#4C97F3" />
         </div>
         <div className="mt-4 h-6 bg-gray-100" />
-        <div className="relative mt-3 justify-between px-4">
+        <div
+          className="relative mt-3 justify-between px-4"
+          onClick={() => {
+            setOpen(true);
+            setOpenTarget('description');
+          }}
+        >
           <div>
             <h3>自己紹介</h3>
             <p className="mt-4 w-80">{data.profile.description}</p>
           </div>
           <div className="absolute right-2 bottom-4">
-            <IconButton
-              onClick={() => {
-                setOpen(true);
-                setOpenTarget('description');
-              }}
-            >
+            <IconButton>
               <MdOutlineKeyboardArrowRight className="absolute mt-4" />
             </IconButton>
           </div>
@@ -288,17 +289,16 @@ const Mypage = () => {
           <div
             className="flex items-center justify-between"
             style={{ borderBottom: '1px solid #EBECEF' }}
+            onClick={() => {
+              setOpen(true);
+              setOpenTarget('prefecture');
+            }}
           >
             <p>住居地</p>
             <div>
               <div className="flex items-center">
                 <p>{jp.prefecture[data.prefecture]}</p>
-                <IconButton
-                  onClick={() => {
-                    setOpen(true);
-                    setOpenTarget('prefecture');
-                  }}
-                >
+                <IconButton>
                   <MdOutlineKeyboardArrowRight />
                 </IconButton>
               </div>
@@ -307,17 +307,16 @@ const Mypage = () => {
           <div
             className="flex items-center justify-between"
             style={{ borderBottom: '1px solid #EBECEF' }}
+            onClick={() => {
+              setOpen(true);
+              setOpenTarget('work_prefecture');
+            }}
           >
             <p>勤務地</p>
             <div>
               <div className="flex items-center">
                 <p>{jp.prefecture[data.profile.work_prefecture!]}</p>
-                <IconButton
-                  onClick={() => {
-                    setOpen(true);
-                    setOpenTarget('work_prefecture');
-                  }}
-                >
+                <IconButton>
                   <MdOutlineKeyboardArrowRight />
                 </IconButton>
               </div>
@@ -326,17 +325,16 @@ const Mypage = () => {
           <div
             className="flex items-center justify-between"
             style={{ borderBottom: '1px solid #EBECEF' }}
+            onClick={() => {
+              setOpen(true);
+              setOpenTarget('born_prefecture');
+            }}
           >
             <p>出身地</p>
             <div>
               <div className="flex items-center">
                 <p>{jp.prefecture[data.profile.born_prefecture!]}</p>
-                <IconButton
-                  onClick={() => {
-                    setOpen(true);
-                    setOpenTarget('born_prefecture');
-                  }}
-                >
+                <IconButton>
                   <MdOutlineKeyboardArrowRight />
                 </IconButton>
               </div>
@@ -345,17 +343,16 @@ const Mypage = () => {
           <div
             className="flex items-center justify-between"
             style={{ borderBottom: '1px solid #EBECEF' }}
+            onClick={() => {
+              setOpen(true);
+              setOpenTarget('blood_type');
+            }}
           >
             <p>血液型</p>
             <div>
               <div className="flex items-center">
                 <p>{data.profile.blood_type}</p>
-                <IconButton
-                  onClick={() => {
-                    setOpen(true);
-                    setOpenTarget('blood_type');
-                  }}
-                >
+                <IconButton>
                   <MdOutlineKeyboardArrowRight />
                 </IconButton>
               </div>
@@ -364,17 +361,16 @@ const Mypage = () => {
           <div
             className="flex items-center justify-between"
             style={{ borderBottom: '1px solid #EBECEF' }}
+            onClick={() => {
+              setOpen(true);
+              setOpenTarget('height');
+            }}
           >
             <p>身長</p>
             <div>
               <div className="flex items-center">
                 <p>{data.profile.height + 'cm'}</p>
-                <IconButton
-                  onClick={() => {
-                    setOpen(true);
-                    setOpenTarget('height');
-                  }}
-                >
+                <IconButton>
                   <MdOutlineKeyboardArrowRight />
                 </IconButton>
               </div>
@@ -383,17 +379,16 @@ const Mypage = () => {
           <div
             className="flex items-center justify-between"
             style={{ borderBottom: '1px solid #EBECEF' }}
+            onClick={() => {
+              setOpen(true);
+              setOpenTarget('weight');
+            }}
           >
             <p>体型</p>
             <div>
               <div className="flex items-center">
                 <p>{jp.weight[data.profile.weight!]}</p>
-                <IconButton
-                  onClick={() => {
-                    setOpen(true);
-                    setOpenTarget('weight');
-                  }}
-                >
+                <IconButton>
                   <MdOutlineKeyboardArrowRight />
                 </IconButton>
               </div>
@@ -402,17 +397,16 @@ const Mypage = () => {
           <div
             className="flex items-center justify-between"
             style={{ borderBottom: '1px solid #EBECEF' }}
+            onClick={() => {
+              setOpen(true);
+              setOpenTarget('education');
+            }}
           >
             <p>学歴</p>
             <div>
               <div className="flex items-center">
                 <p>{jp.education[data.profile.education!]}</p>
-                <IconButton
-                  onClick={() => {
-                    setOpen(true);
-                    setOpenTarget('education');
-                  }}
-                >
+                <IconButton>
                   <MdOutlineKeyboardArrowRight />
                 </IconButton>
               </div>
@@ -421,17 +415,16 @@ const Mypage = () => {
           <div
             className="flex items-center justify-between"
             style={{ borderBottom: '1px solid #EBECEF' }}
+            onClick={() => {
+              setOpen(true);
+              setOpenTarget('income');
+            }}
           >
             <p>年収</p>
             <div>
               <div className="flex items-center">
                 <p>{jp.income[data.profile.income!]}</p>
-                <IconButton
-                  onClick={() => {
-                    setOpen(true);
-                    setOpenTarget('income');
-                  }}
-                >
+                <IconButton>
                   <MdOutlineKeyboardArrowRight />
                 </IconButton>
               </div>
@@ -440,17 +433,16 @@ const Mypage = () => {
           <div
             className="flex items-center justify-between"
             style={{ borderBottom: '1px solid #EBECEF' }}
+            onClick={() => {
+              setOpen(true);
+              setOpenTarget('marry_intention');
+            }}
           >
             <p>結婚に対する意志</p>
             <div>
               <div className="flex items-center">
                 <p>{jp.marryIntention[data.profile.marry_intention!]}</p>
-                <IconButton
-                  onClick={() => {
-                    setOpen(true);
-                    setOpenTarget('marry_intention');
-                  }}
-                >
+                <IconButton>
                   <MdOutlineKeyboardArrowRight />
                 </IconButton>
               </div>
