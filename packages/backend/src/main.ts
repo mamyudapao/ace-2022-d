@@ -41,4 +41,8 @@ const bootstrap = async () => {
   await application.listen(3001, '0.0.0.0');
 };
 
+process.on('unhandledRejection', (reason, promise) => {
+  console.log('Unhandled Rejection at:', promise, 'reason:', reason);
+});
+
 bootstrap().catch(e => console.error(e));
