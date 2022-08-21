@@ -3,6 +3,7 @@ import { WebSocketGateway, WebSocketServer, WsException } from '@nestjs/websocke
 import { Server, Socket } from 'socket.io';
 import { AuthService } from '@auth/auth.service';
 import { TalkService } from '@talk/talk.service';
+import { User } from '@prisma/client';
 
 @WebSocketGateway({
   cors: {
@@ -23,18 +24,20 @@ export class TalkGateway {
   async handleConnection(socket: Socket) {
     const jwtToken = socket.handshake.auth['access_token'] as string;
 
-    if (!jwtToken) {
+    if (!jwtToken) throw new WsException('Unauthorized');
+
+    let user: User | null;
+
+    try {
+      user = await this.authService.getUserFromToken(jwtToken);
+    } catch (e) {
       throw new WsException('Unauthorized');
     }
 
-    const user = await this.authService.getUserFromToken(jwtToken);
-
-    if (!user) {
-      throw new WsException('Unauthorized');
-    }
+    if (!user) throw new WsException('Unauthorized');
 
     const talks = await this.talkService.getTalks();
-    const joinedTalks = talks.filter(talk => talk.users.some(member => member.id === user.id));
+    const joinedTalks = talks.filter(talk => talk.users.some(member => member.id === user?.id));
 
     joinedTalks.forEach(talk => void socket.join(talk.id));
   }

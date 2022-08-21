@@ -90,17 +90,23 @@ export class AuthService {
     if (!(await compare(refreshToken, user.refresh_token)))
       throw new BadRequestException(invalidErrorMessage);
 
-    const newPayload = {
-      sub: user.id,
-    };
+    const accessToken = this.jwtService.sign(
+      {
+        sub: user.id,
+      },
+      {
+        expiresIn: '15m',
+      }
+    );
 
-    const accessToken = this.jwtService.sign(newPayload, {
-      expiresIn: '15m',
-    });
-
-    const newRefreshToken = this.jwtService.sign(newPayload, {
-      expiresIn: '7d',
-    });
+    const newRefreshToken = this.jwtService.sign(
+      {
+        sub_refresh: user.id,
+      },
+      {
+        expiresIn: '7d',
+      }
+    );
 
     await this.prismaService.user.update({
       where: { id: user.id },
@@ -169,17 +175,21 @@ export class AuthService {
   }
 
   async getUserFromToken(token: string): Promise<(User & { profile: Profile | null }) | null> {
-    const payload = this.jwtService.verify<{
-      sub: string;
-    }>(token);
+    try {
+      const payload = this.jwtService.verify<{
+        sub: string;
+      }>(token);
 
-    return await this.prismaService.user.findUnique({
-      where: {
-        id: payload.sub,
-      },
-      include: {
-        profile: true,
-      },
-    });
+      return await this.prismaService.user.findUnique({
+        where: {
+          id: payload.sub,
+        },
+        include: {
+          profile: true,
+        },
+      });
+    } catch (e) {
+      throw new BadRequestException('Invalid access token');
+    }
   }
 }

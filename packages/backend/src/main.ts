@@ -5,6 +5,7 @@ import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import csurf from 'csurf';
 import { AppModule } from '@v1/app.module';
+import { TalkFilter } from '@talk/talk.filter';
 
 const bootstrap = async () => {
   const application = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -32,6 +33,8 @@ const bootstrap = async () => {
       forbidNonWhitelisted: true,
     })
   );
+
+  application.useGlobalFilters(new TalkFilter());
 
   application.enableVersioning({ type: VersioningType.URI });
 
