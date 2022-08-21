@@ -33,11 +33,31 @@ export class UserService {
     id: string,
     data: UpdateUserRequest
   ): Promise<User & { profile: Profile | null }> {
-    await this.prismaService.profile.update({
+    await this.prismaService.profile.upsert({
       where: {
         user_id: id,
       },
-      data: {
+      update: {
+        description: data.description,
+        avatar: data.avatar,
+        height: data.height,
+        weight: data.weight,
+        education: data.education,
+        income: data.income,
+        holiday: data.holiday,
+        work_prefecture: data.work_prefecture,
+        born_prefecture: data.born_prefecture,
+        blood_type: data.blood_type,
+        marry_intention: data.marry_intention,
+        date_plans: {
+          connect: data.date_plans?.map(plan => ({ id: plan })),
+        },
+        hobbies: {
+          connect: data.hobbies?.map(hobby => ({ id: hobby })),
+        },
+      },
+      create: {
+        user_id: id,
         description: data.description,
         avatar: data.avatar,
         height: data.height,
@@ -57,6 +77,7 @@ export class UserService {
         },
       },
     });
+
     return await this.prismaService.user.update({
       where: { id },
       data: {
