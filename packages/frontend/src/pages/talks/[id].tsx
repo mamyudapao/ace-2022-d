@@ -6,6 +6,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { KeyboardEvent } from 'react';
 import { FiArrowLeft } from 'react-icons/fi';
 import { TbCamera } from 'react-icons/tb';
+import UserDetailModal from '@organisms/UserDetailModal';
 import { useAuth } from '@hooks/useAuth';
 import { useSocket } from '@hooks/useSocket';
 import { useTalk } from '@hooks/useTalk';
@@ -14,6 +15,7 @@ import { TalkResponse, UserResponse } from '@api/model';
 
 const MessageRoom = () => {
   useSocket();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const router = useRouter();
   const talkId = router.query['id']?.toString() ?? '';
@@ -37,41 +39,62 @@ const MessageRoom = () => {
     return null;
   }
 
+  //TODO: プロフィール画像リストの取得
+  //TODO: 年齢計算、県名変換
   return (
-    <div className="flex h-screen w-screen flex-col justify-between gap-6 overflow-hidden p-4">
-      <div className="flex flex-1 flex-col overflow-hidden">
-        <div className="flex items-center pt-2 pb-3">
-          <FiArrowLeft className="mr-3 cursor-pointer" size={32} onClick={router.back} />
-          {talk && (
-            <Image
-              className="rounded-full"
-              src={getPairUser(talk)?.profile?.avatar ?? ''}
-              width={32}
-              height={32}
-              alt=""
+    <>
+      <div className="flex h-screen w-screen flex-col justify-between gap-6 overflow-hidden py-4">
+        <div className="flex flex-1 flex-col overflow-hidden">
+          <div className="flex items-center px-4 pt-2 pb-3">
+            <FiArrowLeft
+              className="mr-3 cursor-pointer"
+              size={32}
+              onClick={!isModalOpen ? router.back : () => setIsModalOpen(false)}
+            />
+            <div className="flex items-center" onClick={() => setIsModalOpen(true)}>
+              {talk && (
+                <Image
+                  className="rounded-full"
+                  src={getPairUser(talk)?.profile?.avatar ?? ''}
+                  width={32}
+                  height={32}
+                  alt=""
+                />
+              )}
+              <Typography className="ml-2 text-lg" variant="h6">
+                {getPairUser(talk)?.nickname}
+              </Typography>
+            </div>
+          </div>
+          {!isModalOpen ? (
+            <div className="flex flex-1 flex-col gap-2 overflow-y-auto px-4">
+              {talk?.messages.map(message => (
+                <Message
+                  key={message.id}
+                  content={message.content ?? ''}
+                  time={new Date(message.created_at)}
+                  isSelf={message.author_id === user?.id}
+                  avatar={getPairUser(talk)?.profile?.avatar ?? ''}
+                />
+              ))}
+            </div>
+          ) : (
+            <UserDetailModal
+              nickname={getPairUser(talk)?.nickname ?? ''}
+              avatar={getPairUser(talk)?.profile?.avatar ?? ''}
+              age={0}
+              prefecture={getPairUser(talk)?.prefecture ?? ''}
+              hobbies={getPairUser(talk)?.profile?.hobbies ?? []}
+              imageList={[getPairUser(talk)?.profile?.avatar ?? '']}
             />
           )}
-          <Typography className="ml-2 text-lg" variant="h6">
-            {getPairUser(talk)?.nickname}
-          </Typography>
         </div>
-        <div className="flex flex-1 flex-col gap-2 overflow-y-auto">
-          {talk?.messages.map(message => (
-            <Message
-              key={message.id}
-              content={message.content ?? ''}
-              time={new Date(message.created_at)}
-              isSelf={message.author_id === user?.id}
-              avatar={getPairUser(talk)?.profile?.avatar ?? ''}
-            />
-          ))}
+        <div className="flex flex-none items-center gap-4 px-4">
+          <TbCamera size={24} color="#A1A6B5" />
+          <MessageInput talkId={talkId} />
         </div>
       </div>
-      <div className="flex flex-none items-center gap-4">
-        <TbCamera size={24} color="#A1A6B5" />
-        <MessageInput talkId={talkId} />
-      </div>
-    </div>
+    </>
   );
 };
 

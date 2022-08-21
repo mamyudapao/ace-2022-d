@@ -183,7 +183,7 @@ const BasicProfileStep = (props: BasicProfileStepProps) => {
               onClick={() => setEditingWeight(true)}
             >
               <Typography variant="h6" fontWeight="normal">
-                体系
+                体型
               </Typography>
               {weight ? (
                 <Typography variant="h6" fontWeight="normal" color="#e64c5b">
