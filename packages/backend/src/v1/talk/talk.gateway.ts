@@ -1,5 +1,5 @@
 import { Inject, forwardRef } from '@nestjs/common';
-import { WebSocketGateway, WebSocketServer, WsException } from '@nestjs/websockets';
+import { WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { AuthService } from '@auth/auth.service';
 import { TalkService } from '@talk/talk.service';
@@ -24,17 +24,24 @@ export class TalkGateway {
   async handleConnection(socket: Socket) {
     const jwtToken = socket.handshake.auth['access_token'] as string;
 
-    if (!jwtToken) throw new WsException('Unauthorized');
+    if (!jwtToken) {
+      socket.disconnect(true);
+      return;
+    }
 
     let user: User | null;
 
     try {
       user = await this.authService.getUserFromToken(jwtToken);
     } catch (e) {
-      throw new WsException('Unauthorized');
+      socket.disconnect(true);
+      return;
     }
 
-    if (!user) throw new WsException('Unauthorized');
+    if (!user) {
+      socket.disconnect(true);
+      return;
+    }
 
     const talks = await this.talkService.getTalks();
     const joinedTalks = talks.filter(talk => talk.users.some(member => member.id === user?.id));

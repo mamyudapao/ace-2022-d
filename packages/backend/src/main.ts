@@ -5,7 +5,6 @@ import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import csurf from 'csurf';
 import { AppModule } from '@v1/app.module';
-import { TalkFilter } from '@talk/talk.filter';
 
 const bootstrap = async () => {
   const application = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -34,15 +33,9 @@ const bootstrap = async () => {
     })
   );
 
-  application.useGlobalFilters(new TalkFilter());
-
   application.enableVersioning({ type: VersioningType.URI });
 
   await application.listen(3001, '0.0.0.0');
 };
 
-process.on('unhandledRejection', (reason, promise) => {
-  console.log('Unhandled Rejection at:', promise, 'reason:', reason);
-});
-
-bootstrap().catch(e => console.error(e));
+bootstrap().catch(console.error);
